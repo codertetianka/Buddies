@@ -8,7 +8,7 @@ export const SignupScreen = () => {
   return (
     <>
       {/* comment/uncomment SearchCameraBar to see/unsee how this component renders */}
-      {/* <SearchCameraBar/> */}
+      <SearchCameraBar />
       <View style={styles.container}>
         <Text>Sign Up</Text>
         {/* You can customize this screen for sign up */}
