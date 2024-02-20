@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Camera, CameraType } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import { useFonts } from "expo-font";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
+import UserContext from "./context/UserContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ export default function App() {
   });
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [loggedUser, setLoggedUser] = useState({})
 
   useEffect(() => {
     requestPermission();
@@ -59,8 +61,9 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
+    <UserContext.Provider value={{loggedUser, setLoggedUser}}>
+      <NavigationContainer>
+        <Stack.Navigator>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -71,7 +74,9 @@ export default function App() {
           component={SignupScreen}
           options={{ title: "Sign Up", headerShown: false }}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserContext.Provider>
+ 
   );
 }
