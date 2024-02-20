@@ -1,12 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Camera, CameraType } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +46,25 @@ export default function App() {
     "GT-Eesti-Text-UltraLight-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-UltraLight-Trial.otf"),
   });
 
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    if (fontsLoaded === true) {
+      setAppIsReady(true);
+    }
+  }, [fontsLoaded]);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
   const [permission, requestPermission] = Camera.useCameraPermissions();
 
   useEffect(() => {
@@ -50,6 +73,9 @@ export default function App() {
 
   console.log("[App]", { fontsLoaded, fontError });
 
+  if (!appIsReady) {
+    return null;
+  }
   if (!fontsLoaded) {
     return null;
   }
@@ -59,19 +85,21 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "Home", headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignupScreen"
-          component={SignupScreen}
-          options={{ title: "Sign Up", headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: "Home", headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignupScreen"
+            component={SignupScreen}
+            options={{ title: "Sign Up", headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
