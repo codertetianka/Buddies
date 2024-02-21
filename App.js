@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
 import UserContext from "./context/UserContext";
+import { CameraComponent } from "./src/screens/Components/CameraComponent";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -67,7 +68,7 @@ export default function App() {
   }, [appIsReady]);
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [loggedUser, setLoggedUser] = useState({})
+  const [loggedUser, setLoggedUser] = useState({});
 
   useEffect(() => {
     requestPermission();
@@ -87,24 +88,28 @@ export default function App() {
   }
 
   return (
-
-    <UserContext.Provider value={{loggedUser, setLoggedUser}}>
-    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "Home", headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignupScreen"
-          component={SignupScreen}
-          options={{ title: "Sign Up", headerShown: false }}
-        />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+    <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
+      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ title: "Home", headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignupScreen"
+              component={SignupScreen}
+              options={{ title: "Sign Up", headerShown: false }}
+            />
+            <Stack.Screen
+              name="CameraComponent"
+              component={CameraComponent}
+              options={{ title: "Camera", headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
     </UserContext.Provider>
   );
 }
