@@ -5,19 +5,34 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  // ImageBackground, uncomment to see the background idea and comment out background color
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import * as Font from "expo-font";
+import { db } from "../../../firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore"
 
 export const HomeScreen = () => {
   const { navigate } = useNavigation();
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleLogin = () => {
-    // will add login logic here
+  const handleLogin = async () => {
+    const q = query(collection(db, "users"), where("username", "==", username));
+    try {
+      const snapshot = await getDocs(q)
+    snapshot.forEach((doc) => {
+    // console.log(doc.id, '=>', doc.data())
+    const userdata = doc.data()
+    if (userdata.username) {
+      console.log('will navigate to profile')
+    }
+    })
+    setUsername('')
+  }
+catch (err) {
+  console.log(err)
+}
     setIsLoggingIn(true);
     // authentication will be here
     setTimeout(() => {
@@ -29,68 +44,80 @@ export const HomeScreen = () => {
 
   const handleSignup = () => {
     // signup logic will go here
-    console.log("Signing up:", { name, username });
     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
   };
 
   return (
-    // <ImageBackground
-    //   resizeMode="stretch"
-    //   source={require("../../../images/plant.png")}
-    //   style={styles.background}
-    // >
-    <View style={styles.container}>
-      <Text style={styles.buddiesText}>
-        Welcome back to your{" "}
-        <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
-      </Text>
-
-      <TextInput
-        placeholder="Username"
-        value={name}
-        onChangeText={(text) => setName(text)}
-        style={[styles.input, styles.roundedInput]}
-        maxLength={50}
-      />
-      <TextInput
-        placeholder="Password"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-        style={[styles.input, styles.roundedInput]}
-        maxLength={50}
-      />
-
-      <TouchableOpacity
-        style={[styles.button, styles.loginButton]}
-        onPress={handleLogin}
-        disabled={isLoggingIn}
-      >
-        <Text style={styles.buttonText}>
-          {isLoggingIn ? "Logging in..." : "Log In"}
+    <ImageBackground
+      resizeMode="stretch"
+      source={require("../../../assets/splash.png")}
+      style={[
+        styles.background,
+        { backgroundColor: "rgba(255, 255, 255, 0.5)" },
+      ]}
+    >
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.buddiesText,
+            { fontFamily: "GT-Eesti-Display-Medium-Trial" },
+            { fontSize: 30 },
+          ]}
+        >
+          Welcome back to your{" "}
+          <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
         </Text>
-      </TouchableOpacity>
 
-      <Text style={styles.orText}>Or</Text>
+        <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+          style={[styles.input, styles.roundedInput]}
+          maxLength={50}
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={(password) => setPassword(password)}
+          style={[styles.input, styles.roundedInput]}
+          maxLength={50}
+        />
 
-      <TouchableOpacity onPress={handleSignup}>
-        <Text style={styles.signupText}>
-          <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
-          <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.loginButton]}
+          onPress={handleLogin}
+          disabled={isLoggingIn}
+        >
+          <Text style={styles.buttonText}>
+            {isLoggingIn ? "Logging in..." : "Log In"}
+          </Text>
+        </TouchableOpacity>
 
-      <Text style={styles.tipText}>
-        Tip: Press the camera icon in the search bar to identify your plant!🌱
-      </Text>
-    </View>
-    // </ImageBackground>
+        <Text style={styles.orText}>Or</Text>
+
+        <TouchableOpacity onPress={handleSignup}>
+          <Text style={styles.signupText}>
+            <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
+            <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
+          </Text>
+        </TouchableOpacity>
+
+        {/* <Text
+          style={[
+            styles.tipText,
+            { fontFamily: "GT-Eesti-Text-UltraLight-Trial" },
+          ]}
+        >
+          Tip: Press the camera icon in the search bar to identify your plant!🌱
+        </Text> */}
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -105,6 +132,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#8fcbaf",
     width: 250,
+    fontFamily: "GT-Eesti-Display-Medium-Italic-Trial",
   },
   roundedInput: {
     borderRadius: 25,
@@ -112,12 +140,14 @@ const styles = StyleSheet.create({
   },
   orText: {
     marginVertical: 10,
+    fontFamily: "GT-Eesti-Display-Light-Trial",
   },
   tipText: {
     marginTop: 40,
     paddingHorizontal: 20,
     fontSize: 12,
     color: "#666",
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
     marginBottom: 20,
@@ -139,10 +169,12 @@ const styles = StyleSheet.create({
   },
   signupText: {
     marginVertical: 10,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
 });
