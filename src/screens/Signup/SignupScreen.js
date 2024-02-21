@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const backgroundImage = require("../../../images/pls.jpg");
+const backgroundImage = require("../../../assets/plantsign.png");
 
 export const SignupScreen = () => {
   const { navigate } = useNavigation();
@@ -37,7 +37,6 @@ export const SignupScreen = () => {
             style={[
               styles.buddiesText,
               {
-                fontSize: 30,
                 marginBottom: 20,
               },
             ]}
@@ -75,7 +74,7 @@ export const SignupScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.goToLoginContainer}>
-          <TouchableOpacity onPress={() => navigate("Home")}>
+          <TouchableOpacity onPress={() => navigate("Login")}>
             <Text style={styles.signupText}>Back to Login</Text>
           </TouchableOpacity>
         </View>
@@ -98,51 +97,59 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 15,
     padding: 10,
     borderWidth: 1,
     borderColor: "#8fcbaf",
-    width: 250,
-    fontFamily: "GT-Eesti-Display-Medium-Italic-Trial",
+    width: 300,
+    height: 50,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   roundedInput: {
     borderRadius: 25,
     backgroundColor: "#def2e6",
   },
   button: {
+    marginBottom: -40,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 25,
+    paddingVertical: 16,
+    paddingHorizontal: 25,
+    borderRadius: 35,
+    marginVertical: 12,
     minWidth: 150,
   },
   loginButton: {
+    marginBottom: -110,
     backgroundColor: "#1a6a45",
     position: "absolute",
-    bottom: 350,
+    bottom: 320,
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
-    marginBottom: 20,
-    fontSize: 24,
+    marginVertical: 190,
+    fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   signupText: {
     color: "#136f44",
+    fontSize: 17,
+    marginVertical: 90,
+    alignItems: "center",
+    marginBottom: -110,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   goToLoginContainer: {
     position: "absolute",
     bottom: 250,
-    left: "65%",
+    left: "62%",
     marginLeft: -80,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },

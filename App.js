@@ -4,10 +4,11 @@ import { Camera, CameraType } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { HomeScreen } from "./src/screens/Home/HomeScreen";
+import { LoginScreen } from "./src/screens/Home/LoginScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
+import { UserProfileScreen } from "./src/screens/User/UserProfileScreen";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -80,7 +81,7 @@ export default function App() {
     return null;
   }
 
-  if (!permission.granted) {
+  if (!permission?.granted) {
     return null;
   }
 
@@ -89,14 +90,19 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ title: "Home", headerShown: false }}
+            name="Login"
+            component={LoginScreen}
+            options={{ title: "Login", headerShown: false }}
           />
           <Stack.Screen
             name="SignupScreen"
             component={SignupScreen}
             options={{ title: "Sign Up", headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserProfileScreen"
+            component={UserProfileScreen}
+            options={{ title: "User Profile", headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
