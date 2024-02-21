@@ -8,10 +8,12 @@ import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
+import { CameraComponent } from "./src/screens/Components/CameraComponent";
 import UserContext from "./context/UserContext";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
+
 
 const Stack = createNativeStackNavigator();
 
@@ -102,8 +104,13 @@ export default function App() {
           component={SignupScreen}
           options={{ title: "Sign Up", headerShown: false }}
         />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <Stack.Screen
+          name="CameraComponent"
+          component={CameraComponent}
+          options={{ title: "Camera", headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
     </View>
     </UserContext.Provider>
   );

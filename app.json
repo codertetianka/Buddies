@@ -28,10 +28,12 @@
       "favicon": "./assets/favicon.png" 
     },
     "plugins": [
+
       [
         "expo-font",
       {
         "fonts": [
+          "./assets",
         "./assets/GT-Eesti/GT-Eesti-Display-Bold-Italic-Trial.otf",
         "./assets/GT-Eesti/GT-Eesti-Display-Bold-Trial.otf",
         "./assets/GT-Eesti/GT-Eesti-Display-Light-Italic-Trial.otf",
@@ -61,18 +63,22 @@
         "./assets/GT-Eesti/GT-Eesti-Text-ULight-Italic-Trial.otf",
         "./assets/GT-Eesti/GT-Eesti-Text-UltraLight-Trial.otf"
       ]
-    }
-   
+    } 
       ],
       [
         "expo-camera",
       {
         "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
       }
+      ],
+       [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
-      
-      
     ]
-  }
-  
+  } 
 }
