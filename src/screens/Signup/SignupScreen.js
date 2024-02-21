@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+const backgroundImage = require("../../../images/pls.jpg");
+
 export const SignupScreen = () => {
   const { navigate } = useNavigation();
   const [name, setName] = useState("");
@@ -19,7 +21,7 @@ export const SignupScreen = () => {
   return (
     <ImageBackground
       resizeMode="stretch"
-      source={require("../../../images/photo.png")}
+      source={backgroundImage}
       style={styles.background}
     >
       <View style={styles.container}>
