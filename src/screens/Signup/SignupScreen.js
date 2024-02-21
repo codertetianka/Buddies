@@ -8,6 +8,10 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import UserContext from "../../../context/UserContext";
+import { useContext } from 'react';
+import { db } from "../../../firebaseConfig";
+import { collection, addDoc, getDocs, query, where  } from "firebase/firestore"
 
 const backgroundImage = require("../../../images/pls.jpg");
 
@@ -15,8 +19,37 @@ export const SignupScreen = () => {
   const { navigate } = useNavigation();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const { loggedUser, setLoggedUser } = useContext(UserContext)
 
-  const handleSignup = () => {};
+  const handleSignup = async () => {
+    const q = query(collection(db, "users"), where("username", "==", username));
+    try {
+      let isUserNew = true
+      const snapshot = await getDocs(q)
+      snapshot.forEach((doc) => {
+      // console.log(doc.id, '=>', doc.data())
+      const userData = doc.data()
+      if (userData.username) {
+        isUserNew = false
+      }
+    })
+    if (!isUserNew) {
+      navigate('Home')
+    }
+    else {
+      const docRef = await addDoc(collection(db, "users"), {
+      name,
+      username
+    })
+    console.log("Document written with ID: ", docRef.id)
+    console.log('will navigate to plant list')
+    setLoggedUser(username)
+    }
+  }
+catch (err) {
+  console.log(err)
+}
+  };
 
   return (
     <ImageBackground

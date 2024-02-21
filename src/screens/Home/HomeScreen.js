@@ -8,15 +8,31 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { db } from "../../../firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore"
 
 export const HomeScreen = () => {
   const { navigate } = useNavigation();
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleLogin = () => {
-    // will add login logic here
+  const handleLogin = async () => {
+    const q = query(collection(db, "users"), where("username", "==", username));
+    try {
+      const snapshot = await getDocs(q)
+    snapshot.forEach((doc) => {
+    // console.log(doc.id, '=>', doc.data())
+    const userdata = doc.data()
+    if (userdata.username) {
+      console.log('will navigate to profile')
+    }
+    })
+    setUsername('')
+  }
+catch (err) {
+  console.log(err)
+}
     setIsLoggingIn(true);
     // authentication will be here
     setTimeout(() => {
@@ -28,7 +44,6 @@ export const HomeScreen = () => {
 
   const handleSignup = () => {
     // signup logic will go here
-    console.log("Signing up:", { name, username });
     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
   };
 
@@ -55,15 +70,15 @@ export const HomeScreen = () => {
 
         <TextInput
           placeholder="Username"
-          value={name}
-          onChangeText={(text) => setName(text)}
+          value={username}
+          onChangeText={(text) => setUsername(text)}
           style={[styles.input, styles.roundedInput]}
           maxLength={50}
         />
         <TextInput
           placeholder="Password"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
+          value={password}
+          onChangeText={(password) => setPassword(password)}
           style={[styles.input, styles.roundedInput]}
           maxLength={50}
         />
