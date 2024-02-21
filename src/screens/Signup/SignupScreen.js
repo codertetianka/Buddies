@@ -8,15 +8,12 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { PlantListManager } from "../PlantListManager";
-
 import UserContext from "../../../context/UserContext";
 import { useContext } from 'react';
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where  } from "firebase/firestore"
 
 const backgroundImage = require("../../../images/pls.jpg");
-
 
 export const SignupScreen = () => {
   const { navigate } = useNavigation();
@@ -55,7 +52,6 @@ catch (err) {
   };
 
   return (
-
     <ImageBackground
       resizeMode="stretch"
       source={backgroundImage}
@@ -79,55 +75,45 @@ catch (err) {
               },
             ]}
           >
+            Sign Up to{" "}
             <Text
-              style={[
-                styles.buddiesText,
-                {
-                  fontSize: 30,
-                  marginBottom: 20,
-                },
-              ]}
+              style={{
+                color: "#3bb162",
+                fontFamily: "GT-Eesti-Display-Medium-Trial",
+              }}
             >
-              Sign Up to{" "}
-              <Text
-                style={{
-                  color: "#3bb162",
-                  fontFamily: "GT-Eesti-Display-Medium-Trial",
-                }}
-              >
-                Buddies!
-              </Text>
+              Buddies!
             </Text>
+          </Text>
 
-            <TextInput
-              placeholder="What's your name?"
-              value={name}
-              onChangeText={(text) => setName(text)}
-              style={[styles.input, styles.roundedInput]}
-            />
-            <TextInput
-              placeholder="What's your username?"
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-              style={[styles.input, styles.roundedInput]}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={[styles.button, styles.loginButton]}
-            onPress={handleSignup}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-
-          <View style={styles.goToLoginContainer}>
-            <TouchableOpacity onPress={() => navigate("Home")}>
-              <Text style={styles.signupText}>Back to Login</Text>
-            </TouchableOpacity>
-          </View>
+          <TextInput
+            placeholder="What's your name?"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
+          <TextInput
+            placeholder="What's your username?"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
         </View>
-      </ImageBackground>
-    </>
+
+        <TouchableOpacity
+          style={[styles.button, styles.loginButton]}
+          onPress={handleSignup}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <View style={styles.goToLoginContainer}>
+          <TouchableOpacity onPress={() => navigate("Home")}>
+            <Text style={styles.signupText}>Back to Login</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 
