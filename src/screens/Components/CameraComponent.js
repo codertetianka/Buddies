@@ -53,7 +53,7 @@ export const CameraComponent = () => {
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
-
+  console.log("in camera component");
   return (
     <View style={styles.container}>
       {!image ? (
