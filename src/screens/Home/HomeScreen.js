@@ -29,6 +29,7 @@ export const HomeScreen = () => {
     }
     })
     setUsername('')
+    console.log('random console log')
   }
 catch (err) {
   console.log(err)
