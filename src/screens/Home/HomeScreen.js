@@ -50,7 +50,7 @@ catch (err) {
   return (
     <ImageBackground
       resizeMode="stretch"
-      source={require("../../../images/art.png")}
+      source={require("../../../assets/splash.png")}
       style={[
         styles.background,
         { backgroundColor: "rgba(255, 255, 255, 0.5)" },
