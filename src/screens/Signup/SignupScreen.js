@@ -19,7 +19,6 @@ export const SignupScreen = () => {
 
   return (
     <>
-      <PlantListManager />
       <ImageBackground
         resizeMode="stretch"
         source={require("../../../images/photo.png")}
