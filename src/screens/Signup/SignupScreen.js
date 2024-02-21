@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { PlantListManager } from "../PlantListManager";
 
 export const SignupScreen = () => {
   const { navigate } = useNavigation();
@@ -17,68 +18,71 @@ export const SignupScreen = () => {
   const handleSignup = () => {};
 
   return (
-    <ImageBackground
-      resizeMode="stretch"
-      source={require("../../../images/photo.png")}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <View
-          style={{
-            position: "relative",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: 70,
-          }}
-        >
-          <Text
-            style={[
-              styles.buddiesText,
-              {
-                fontSize: 30,
-                marginBottom: 20,
-              },
-            ]}
+    <>
+      <PlantListManager />
+      <ImageBackground
+        resizeMode="stretch"
+        source={require("../../../images/photo.png")}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <View
+            style={{
+              position: "relative",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingBottom: 70,
+            }}
           >
-            Sign Up to{" "}
             <Text
-              style={{
-                color: "#3bb162",
-                fontFamily: "GT-Eesti-Display-Medium-Trial",
-              }}
+              style={[
+                styles.buddiesText,
+                {
+                  fontSize: 30,
+                  marginBottom: 20,
+                },
+              ]}
             >
-              Buddies!
+              Sign Up to{" "}
+              <Text
+                style={{
+                  color: "#3bb162",
+                  fontFamily: "GT-Eesti-Display-Medium-Trial",
+                }}
+              >
+                Buddies!
+              </Text>
             </Text>
-          </Text>
 
-          <TextInput
-            placeholder="What's your name?"
-            value={name}
-            onChangeText={(text) => setName(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
-          <TextInput
-            placeholder="What's your username?"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
-        </View>
+            <TextInput
+              placeholder="What's your name?"
+              value={name}
+              onChangeText={(text) => setName(text)}
+              style={[styles.input, styles.roundedInput]}
+            />
+            <TextInput
+              placeholder="What's your username?"
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+              style={[styles.input, styles.roundedInput]}
+            />
+          </View>
 
-        <TouchableOpacity
-          style={[styles.button, styles.loginButton]}
-          onPress={handleSignup}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-
-        <View style={styles.goToLoginContainer}>
-          <TouchableOpacity onPress={() => navigate("Home")}>
-            <Text style={styles.signupText}>Back to Login</Text>
+          <TouchableOpacity
+            style={[styles.button, styles.loginButton]}
+            onPress={handleSignup}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
+
+          <View style={styles.goToLoginContainer}>
+            <TouchableOpacity onPress={() => navigate("Home")}>
+              <Text style={styles.signupText}>Back to Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 };
 
