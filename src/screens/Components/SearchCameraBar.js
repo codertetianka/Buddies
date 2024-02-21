@@ -23,12 +23,7 @@ export default function SearchCameraBar() {
           clicked ? styles.searchBar__clicked : styles.searchBar__unclicked
         }
       >
-        <Feather
-          name="search"
-          size={20}
-          color="black"
-          style={{ marginLeft: 1 }}
-        />
+        <Feather name="search" size={20} color="black" />
 
         <TextInput
           style={styles.input}

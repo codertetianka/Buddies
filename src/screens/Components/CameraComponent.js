@@ -29,8 +29,6 @@ export const CameraComponent = () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        // console.log(data.uri, "<<<data.uri");
-        // console.log("can we see this in app?")
         setImage(data.uri);
       } catch (e) {
         console.log(e);
@@ -42,9 +40,9 @@ export const CameraComponent = () => {
     if (image) {
       try {
         await MediaLibrary.createAssetAsync(image);
-        // console.log(image, "<<<image");
         alert("Picture saved!");
-        getPlant(image);
+        //make call to node backend here (below was attempted api call to plantnet api)
+        // getPlant(image);
         setImage(null);
       } catch (e) {
         console.log(e);
