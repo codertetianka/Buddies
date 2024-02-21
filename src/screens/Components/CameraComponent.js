@@ -3,7 +3,7 @@ import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
 import Button from "./Buttons";
-import { getPlant } from "../API/api";
+// import { getPlant } from "../API/api";
 
 export const CameraComponent = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -53,7 +53,7 @@ export const CameraComponent = () => {
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
-  console.log("in camera component");
+
   return (
     <View style={styles.container}>
       {!image ? (
