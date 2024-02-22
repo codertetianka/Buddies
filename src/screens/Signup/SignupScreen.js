@@ -53,51 +53,50 @@ export const SignupScreen = () => {
   return (
     <>
       <SearchCameraBar />
-    <ImageBackground
-      resizeMode="stretch"
-      source={backgroundImage}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Text style={[styles.buddiesText]}>
-          Sign Up to{" "}
-          <Text
-            style={{
-              color: "#3bb162",
-              fontFamily: "GT-Eesti-Display-Medium-Trial",
-            }}
-          >
-            Buddies!
+      <ImageBackground
+        resizeMode="stretch"
+        source={backgroundImage}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <Text style={[styles.buddiesText]}>
+            Sign Up to{" "}
+            <Text
+              style={{
+                color: "#3bb162",
+                fontFamily: "GT-Eesti-Display-Medium-Trial",
+              }}
+            >
+              Buddies!
+            </Text>
           </Text>
-        </Text>
 
-        <TextInput
-          placeholder="What's your name?"
-          value={name}
-          onChangeText={(text) => setName(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
-        <TextInput
-          placeholder="What's your username?"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
+          <TextInput
+            placeholder="What's your name?"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
+          <TextInput
+            placeholder="What's your username?"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
 
-        <TouchableOpacity
-          style={[styles.button, styles.loginButton]}
-          onPress={handleSignup}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.loginButton]}
+            onPress={handleSignup}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigate("Login")}>
-          <Text style={styles.signupText}>Back to Login</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+          <TouchableOpacity onPress={() => navigate("Login")}>
+            <Text style={styles.signupText}>Back to Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </>
-
   );
 };
 
