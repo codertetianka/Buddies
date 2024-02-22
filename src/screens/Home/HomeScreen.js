@@ -12,6 +12,7 @@ import { db } from "../../../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore"
 
 export const HomeScreen = () => {
+  console.log('delete log Homescreen line 15')
   const { navigate } = useNavigation();
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
