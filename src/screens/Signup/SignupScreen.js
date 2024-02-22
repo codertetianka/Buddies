@@ -25,46 +25,30 @@ export const SignupScreen = () => {
       style={styles.background}
     >
       <View style={styles.container}>
-        <View
-          style={{
-            position: "relative",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: 70,
-          }}
-        >
+        <Text style={[styles.buddiesText]}>
+          Sign Up to{" "}
           <Text
-            style={[
-              styles.buddiesText,
-              {
-                marginBottom: 20,
-              },
-            ]}
+            style={{
+              color: "#3bb162",
+              fontFamily: "GT-Eesti-Display-Medium-Trial",
+            }}
           >
-            Sign Up to{" "}
-            <Text
-              style={{
-                color: "#3bb162",
-                fontFamily: "GT-Eesti-Display-Medium-Trial",
-              }}
-            >
-              Buddies!
-            </Text>
+            Buddies!
           </Text>
+        </Text>
 
-          <TextInput
-            placeholder="What's your name?"
-            value={name}
-            onChangeText={(text) => setName(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
-          <TextInput
-            placeholder="What's your username?"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
-        </View>
+        <TextInput
+          placeholder="What's your name?"
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={[styles.input, styles.roundedInput]}
+        />
+        <TextInput
+          placeholder="What's your username?"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+          style={[styles.input, styles.roundedInput]}
+        />
 
         <TouchableOpacity
           style={[styles.button, styles.loginButton]}
@@ -73,11 +57,9 @@ export const SignupScreen = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <View style={styles.goToLoginContainer}>
-          <TouchableOpacity onPress={() => navigate("Login")}>
-            <Text style={styles.signupText}>Back to Login</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => navigate("Login")}>
+          <Text style={styles.signupText}>Back to Login</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -85,12 +67,11 @@ export const SignupScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     paddingHorizontal: 20,
     position: "relative",
-    paddingBottom: 60,
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 380,
   },
   background: {
     flex: 1,
@@ -120,10 +101,7 @@ const styles = StyleSheet.create({
     minWidth: 150,
   },
   loginButton: {
-    marginBottom: -110,
     backgroundColor: "#1a6a45",
-    position: "absolute",
-    bottom: 320,
   },
   buttonText: {
     color: "white",
@@ -132,7 +110,7 @@ const styles = StyleSheet.create({
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
-    marginVertical: 190,
+    marginBottom: 92,
     fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
@@ -144,13 +122,6 @@ const styles = StyleSheet.create({
     marginVertical: 90,
     alignItems: "center",
     marginBottom: -110,
-    fontFamily: "GT-Eesti-Display-Medium-Trial",
-  },
-  goToLoginContainer: {
-    position: "absolute",
-    bottom: 250,
-    left: "62%",
-    marginLeft: -80,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
 });

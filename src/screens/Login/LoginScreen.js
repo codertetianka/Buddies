@@ -86,10 +86,12 @@ export const LoginScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: "red", marginTop: 40 }]} // Adjusted marginTop to position the button lower
+          style={[styles.button, { backgroundColor: "red", marginTop: 40 }]}
           onPress={() => navigate("UserProfileScreen")}
         >
-          <Text style={styles.buttonText}>Go to User Page</Text>
+          <Text style={styles.buttonText}>
+            Go to User Page(all screens are there)
+          </Text>
         </TouchableOpacity>
 
         {/* <Text
@@ -109,9 +111,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     paddingHorizontal: 20,
-    marginBottom: -230,
+    paddingTop: 380,
+    // marginBottom: -230,
+    // backgroundColor: "red",
   },
   background: {
     flex: 1,

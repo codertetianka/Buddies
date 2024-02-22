@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export const UserProfileScreen = () => {
+export const IdentifiedScreen = () => {
   const { navigate } = useNavigation();
 
   return (
@@ -19,39 +19,13 @@ export const UserProfileScreen = () => {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>User Profile Screen</Text>
+          <Text style={styles.text}>Indentified Plant Profile Screen</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => navigate("HomeScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to Home page</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigate("Login")}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("PlantProfileScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to plant profile page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("IdentifiedScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to identified plant page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("UnidentifiedScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>
-                Go to unidentified plant page
-              </Text>
             </TouchableOpacity>
           </View>
         </View>
