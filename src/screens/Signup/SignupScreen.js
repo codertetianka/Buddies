@@ -14,7 +14,7 @@ import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import SearchCameraBar from "../Components/SearchCameraBar";
 
-const backgroundImage = require("../../../images/pls.jpg");
+const backgroundImage = require("../../../assets/plantsign.png");
 
 export const SignupScreen = () => {
   const { navigate } = useNavigation();
@@ -53,132 +53,111 @@ export const SignupScreen = () => {
   return (
     <>
       <SearchCameraBar />
-      <ImageBackground
-        resizeMode="stretch"
-        source={backgroundImage}
-        style={styles.background}
-      >
-        <View style={styles.container}>
-          <View
+    <ImageBackground
+      resizeMode="stretch"
+      source={backgroundImage}
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <Text style={[styles.buddiesText]}>
+          Sign Up to{" "}
+          <Text
             style={{
-              position: "relative",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingBottom: 70,
+              color: "#3bb162",
+              fontFamily: "GT-Eesti-Display-Medium-Trial",
             }}
           >
-            <Text
-              style={[
-                styles.buddiesText,
-                {
-                  fontSize: 30,
-                  marginBottom: 20,
-                },
-              ]}
-            >
-              Sign Up to{" "}
-              <Text
-                style={{
-                  color: "#3bb162",
-                  fontFamily: "GT-Eesti-Display-Medium-Trial",
-                }}
-              >
-                Buddies!
-              </Text>
-            </Text>
+            Buddies!
+          </Text>
+        </Text>
 
-            <TextInput
-              placeholder="What's your name?"
-              value={name}
-              onChangeText={(text) => setName(text)}
-              style={[styles.input, styles.roundedInput]}
-            />
-            <TextInput
-              placeholder="What's your username?"
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-              style={[styles.input, styles.roundedInput]}
-            />
-          </View>
+        <TextInput
+          placeholder="What's your name?"
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={[styles.input, styles.roundedInput]}
+        />
+        <TextInput
+          placeholder="What's your username?"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+          style={[styles.input, styles.roundedInput]}
+        />
 
-          <TouchableOpacity
-            style={[styles.button, styles.loginButton]}
-            onPress={handleSignup}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.loginButton]}
+          onPress={handleSignup}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-          <View style={styles.goToLoginContainer}>
-            <TouchableOpacity onPress={() => navigate("Home")}>
-              <Text style={styles.signupText}>Back to Login</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
+        <TouchableOpacity onPress={() => navigate("Login")}>
+          <Text style={styles.signupText}>Back to Login</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
     </>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     paddingHorizontal: 20,
     position: "relative",
-    paddingBottom: 60,
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 380,
   },
   background: {
     flex: 1,
     justifyContent: "center",
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 15,
     padding: 10,
     borderWidth: 1,
     borderColor: "#8fcbaf",
-    width: 250,
-    fontFamily: "GT-Eesti-Display-Medium-Italic-Trial",
+    width: 300,
+    height: 50,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   roundedInput: {
     borderRadius: 25,
     backgroundColor: "#def2e6",
   },
   button: {
+    marginBottom: -40,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 25,
+    paddingVertical: 16,
+    paddingHorizontal: 25,
+    borderRadius: 35,
+    marginVertical: 12,
     minWidth: 150,
   },
   loginButton: {
     backgroundColor: "#1a6a45",
-    position: "absolute",
-    bottom: 350,
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
-    marginBottom: 20,
-    fontSize: 24,
+    marginBottom: 92,
+    fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   signupText: {
     color: "#136f44",
-    fontFamily: "GT-Eesti-Display-Medium-Trial",
-  },
-  goToLoginContainer: {
-    position: "absolute",
-    bottom: 250,
-    left: "65%",
-    marginLeft: -80,
+    fontSize: 17,
+    marginVertical: 90,
+    alignItems: "center",
+    marginBottom: -110,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
 });

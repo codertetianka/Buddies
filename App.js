@@ -4,10 +4,15 @@ import { Camera, CameraType } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { HomeScreen } from "./src/screens/Home/HomeScreen";
+import { LoginScreen } from "./src/screens/Login/LoginScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SignupScreen } from "./src/screens/Signup/SignupScreen";
+import { UserProfileScreen } from "./src/screens/User/UserProfileScreen";
+import { PlantProfileScreen } from "./src/screens/Plants/PlantProfileScreen";
+import { IdentifiedScreen } from "./src/screens/Plants/IdentifiedScreen";
+import { UnidentifiedScreen } from "./src/screens/Plants/UnidentifiedScreen";
+import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import UserContext from "./context/UserContext";
 import { CameraComponent } from "./src/screens/Components/CameraComponent";
 
@@ -83,33 +88,59 @@ export default function App() {
     return null;
   }
 
-  if (!permission.granted) {
+  if (!permission?.granted) {
     return null;
   }
 
   return (
     <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
-      <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ title: "Home", headerShown: false }}
-            />
-            <Stack.Screen
-              name="SignupScreen"
-              component={SignupScreen}
-              options={{ title: "Sign Up", headerShown: false }}
-            />
-            <Stack.Screen
+    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{ title: "Home Screen", headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: "Login", headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignupScreen"
+            component={SignupScreen}
+            options={{ title: "Sign Up", headerShown: false }}
+          />
+          <Stack.Screen
+            name="UserProfileScreen"
+            component={UserProfileScreen}
+            options={{ title: "User Profile", headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlantProfileScreen"
+            component={PlantProfileScreen}
+            options={{ title: "Plant Profile", headerShown: false }}
+          />
+          <Stack.Screen
+            name="IdentifiedScreen"
+            component={IdentifiedScreen}
+            options={{ title: "Indetified Screen", headerShown: false }}
+          />
+          <Stack.Screen
+            name="UnidentifiedScreen"
+            component={UnidentifiedScreen}
+            options={{ title: "Unidentified Screen", headerShown: false }}
+          />
+          <Stack.Screen
               name="CameraComponent"
               component={CameraComponent}
               options={{ title: "Camera", headerShown: false }}
             />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    </UserContext.Provider>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
+</UserContext.Provider>
+
   );
 }

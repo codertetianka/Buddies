@@ -7,45 +7,9 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-// import { db } from "../../../firebaseConfig";
-// import { collection, getDocs, query, where } from "firebase/firestore"
 
-export const HomeScreen = () => {
+export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
-
-//   const [password, setPassword] = useState("");
-//   const [username, setUsername] = useState("");
-//   const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-//   const handleLogin = async () => {
-//     const q = query(collection(db, "users"), where("username", "==", username));
-//     try {
-//       const snapshot = await getDocs(q)
-//     snapshot.forEach((doc) => {
-//     // console.log(doc.id, '=>', doc.data())
-//     const userdata = doc.data()
-//     if (userdata.username) {
-//       console.log('will navigate to profile')
-//     }
-//     })
-//     setUsername('')
-//   }
-// catch (err) {
-//   console.log(err)
-// }
-//     setIsLoggingIn(true);
-//     // authentication will be here
-//     setTimeout(() => {
-//       setIsLoggingIn(false);
-//       // when login is successful it will go here
-//       navigate("SignupScreen"); // navigate to SignupScreen after login
-//     }, 2000);
-//   };
-
-//   const handleSignup = () => {
-//     // signup logic will go here
-//     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
-//   };
 
   return (
     <ImageBackground
@@ -53,16 +17,41 @@ export const HomeScreen = () => {
       source={require("../../../assets/splash.png")}
       style={styles.background}
     >
-
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>Home (featured plants) Screen</Text>
+          <Text style={styles.text}>User Profile Screen</Text>
           <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => navigate("HomeScreen")}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to Home page</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigate("Login")}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate("PlantProfileScreen")}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to plant profile page</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate("IdentifiedScreen")}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to identified plant page</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate("UnidentifiedScreen")}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>
+                Go to unidentified plant page
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
