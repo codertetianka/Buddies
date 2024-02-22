@@ -8,6 +8,8 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { db } from "../../../firebaseConfig";
+import { query, where, getDocs, collection } from "firebase/firestore";
 
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
@@ -16,10 +18,10 @@ export const LoginScreen = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLogin = async () => {
-    console.log("in handlelogin");
     const q = query(collection(db, "users"), where("username", "==", username));
     try {
       const snapshot = await getDocs(q);
+      console.log(snapshot);
       snapshot.forEach((doc) => {
         console.log(doc.id, "=>", doc.data());
         const userdata = doc.data();
