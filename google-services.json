@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "20707624731",
-    "project_id": "buddies-37155",
-    "storage_bucket": "buddies-37155.appspot.com"
+    "project_number": "180350395573",
+    "project_id": "buddies-82f2e",
+    "storage_bucket": "buddies-82f2e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:20707624731:android:74607ea933f976630875be",
+        "mobilesdk_app_id": "1:180350395573:android:bb98540ba7b2c5731acafc",
         "android_client_info": {
           "package_name": "com.hiphiparray.buddies"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDBo54YNUvQ-14ydOE5zt6JGLsaSELu3tE"
+          "current_key": "AIzaSyD-L9UTsK9AmdQt5m7il4Fddwh7QdkMjsY"
         }
       ],
       "services": {
