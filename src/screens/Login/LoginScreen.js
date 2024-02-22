@@ -25,14 +25,13 @@ export const LoginScreen = () => {
         const userdata = doc.data();
         if (userdata.username) {
           setIsLoggingIn(true);
-          //navigate to HomeScreen?
+          setTimeout(() => {
+            setIsLoggingIn(false);
+            navigate("UserProfileScreen");
+          }, 2000);
         }
       });
       setUsername("");
-      // setTimeout(() => {
-      //   setIsLoggingIn(false);
-      //   navigate("SignupScreen");
-      // }, 2000);
     } catch (err) {
       console.log(err);
     }
