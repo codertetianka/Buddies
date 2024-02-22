@@ -41,7 +41,7 @@ export const SignupScreen = () => {
       console.log("Navigating to plant list");
       setLoggedUser(username);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
