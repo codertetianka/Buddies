@@ -4,6 +4,7 @@ import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { StackScreens } from "../../../App.screens";
 
 export default function SearchCameraBar() {
   const { navigate } = useNavigation();
@@ -13,7 +14,7 @@ export default function SearchCameraBar() {
 
   const handleCameraPress = () => {
     //pressing the camera feather navigates to camera component
-    navigate("CameraComponent");
+    navigate(StackScreens.CameraComponent);
   };
 
   return (

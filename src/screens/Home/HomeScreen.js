@@ -7,7 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 // import { db } from "../../../firebaseConfig";
 // import { collection, getDocs, query, where } from "firebase/firestore"
 

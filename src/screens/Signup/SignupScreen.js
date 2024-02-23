@@ -12,7 +12,7 @@ import UserContext from "../../../context/UserContext";
 import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 
 const backgroundImage = require("../../../assets/plantsign.png");
 
@@ -46,22 +46,22 @@ export const SignupScreen = () => {
   };
 
   return (
-<>
-    <ImageBackground
-      resizeMode="stretch"
-      source={backgroundImage}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Text style={[styles.buddiesText]}>
-          Sign Up to{" "}
-          <Text
-            style={{
-              color: "#3bb162",
-              fontFamily: "GT-Eesti-Display-Medium-Trial",
-            }}
-          >
-            Buddies!
+    <>
+      <ImageBackground
+        resizeMode="stretch"
+        source={backgroundImage}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <Text style={[styles.buddiesText]}>
+            Sign Up to{" "}
+            <Text
+              style={{
+                color: "#3bb162",
+                fontFamily: "GT-Eesti-Display-Medium-Trial",
+              }}
+            >
+              Buddies!
             </Text>
           </Text>
 
@@ -84,11 +84,11 @@ export const SignupScreen = () => {
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate("Login")}>
-          <Text style={styles.signupText}>Back to Login</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+          <TouchableOpacity onPress={() => navigate("Login")}>
+            <Text style={styles.signupText}>Back to Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </>
   );
 };

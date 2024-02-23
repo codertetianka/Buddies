@@ -53,7 +53,7 @@ export const LoginScreen = () => {
 
   const handleSignup = () => {
     // signup logic will go here
-    console.log("Signing up:", { name, username });
+    // console.log("Signing up:", { name, username });
     navigate(StackScreens.SignupScreen); // will navigate to SignupScreen after sign up as well
   };
 
@@ -79,18 +79,17 @@ export const LoginScreen = () => {
             <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
           </Text>
 
-
           <TextInput
             placeholder="Username"
-            value={name}
-            onChangeText={(text) => setName(text)}
+            value={username}
+            onChangeText={(text) => setUsername(text)}
             style={[styles.input, styles.roundedInput]}
             maxLength={50}
           />
           <TextInput
             placeholder="Password"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
             style={[styles.input, styles.roundedInput]}
             maxLength={50}
             secureTextEntry={true}
