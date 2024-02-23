@@ -12,7 +12,7 @@ import UserContext from "../../../context/UserContext";
 import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import SearchCameraBar from "../Components/SearchCameraBar";
+import SearchCameraBar from "../components/SearchCameraBar";
 
 const backgroundImage = require("../../../assets/plantsign.png");
 
@@ -51,8 +51,6 @@ export const SignupScreen = () => {
   };
 
   return (
-    <>
-      <SearchCameraBar />
     <ImageBackground
       resizeMode="stretch"
       source={backgroundImage}
@@ -96,8 +94,6 @@ export const SignupScreen = () => {
         </TouchableOpacity>
       </View>
     </ImageBackground>
-    </>
-
   );
 };
 
