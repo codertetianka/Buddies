@@ -8,27 +8,51 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { db } from "../../../firebaseConfig";
+import { query, where, getDocs, collection } from "firebase/firestore";
 
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleLogin = () => {
-    // will add login logic here
-    setIsLoggingIn(true);
-    // authentication will be here
-    setTimeout(() => {
-      setIsLoggingIn(false);
-      // when login is successful it will go here
-      navigate("SignupScreen"); // navigate to SignupScreen after login
-    }, 2000);
+  const handleLogin = async () => {
+    const q = query(collection(db, "users"), where("username", "==", username));
+    try {
+      const snapshot = await getDocs(q);
+      console.log(snapshot);
+      snapshot.forEach((doc) => {
+        console.log(doc.id, "=>", doc.data());
+        const userdata = doc.data();
+        if (userdata.username) {
+          setIsLoggingIn(true);
+          setTimeout(() => {
+            setIsLoggingIn(false);
+            navigate("UserProfileScreen");
+          }, 2000);
+        }
+      });
+      setUsername("");
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  // const handleLogin = () => {
+  //   // will add login logic here
+  //   setIsLoggingIn(true);
+  //   // authentication will be here
+  //   setTimeout(() => {
+  //     setIsLoggingIn(false);
+  //     // when login is successful it will go here
+  //     navigate("SignupScreen"); // navigate to SignupScreen after login
+  //   }, 2000);
+  // };
 
   const handleSignup = () => {
     // signup logic will go here
-    console.log("Signing up:", { name, username });
+    console.log("in signup");
     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
   };
 
@@ -55,15 +79,15 @@ export const LoginScreen = () => {
 
         <TextInput
           placeholder="Username"
-          value={name}
-          onChangeText={(text) => setName(text)}
+          value={username}
+          onChangeText={(text) => setUsername(text)}
           style={[styles.input, styles.roundedInput]}
           maxLength={50}
         />
         <TextInput
           placeholder="Password"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={[styles.input, styles.roundedInput]}
           maxLength={50}
         />
