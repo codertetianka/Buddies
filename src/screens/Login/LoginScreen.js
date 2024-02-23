@@ -28,7 +28,7 @@ export const LoginScreen = () => {
 
   const handleSignup = () => {
     // signup logic will go here
-    console.log("Signing up:", { name, username });
+    // console.log("Signing up:", { name, username });
     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
   };
 

@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { HomeScreen } from "../Home/HomeScreen";
 
 const backgroundImage = require("../../../assets/plantsign.png");
 
@@ -23,35 +24,38 @@ export const SignupScreen = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
 
   const handleSignup = async () => {
-    const q = query(collection(db, "users"), where("username", "==", username));
-    try {
-      let isUserNew = true;
-      const snapshot = await getDocs(q);
-      snapshot.forEach((doc) => {
-        // console.log(doc.id, '=>', doc.data())
-        const userData = doc.data();
-        if (userData.username) {
-          isUserNew = false;
-        }
-      });
-      if (!isUserNew) {
-        navigate("Home");
-      } else {
-        const docRef = await addDoc(collection(db, "users"), {
-          name,
-          username,
-        });
-        console.log("Document written with ID: ", docRef.id);
-        console.log("will navigate to plant list");
-        setLoggedUser(username);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    console.log('signing up')
+    navigate('HomeScreen')
+    // const q = query(collection(db, "users"), where("username", "==", username));
+    // try {
+    //   let isUserNew = true;
+    //   const snapshot = await getDocs(q);
+    //   snapshot.forEach((doc) => {
+    //     // console.log(doc.id, '=>', doc.data())
+    //     const userData = doc.data();
+    //     if (userData.username) {
+    //       isUserNew = false;
+    //     }
+    //   });
+    //   if (!isUserNew) {
+    //     navigate("Home");
+    //   } else {
+    //     const docRef = await addDoc(collection(db, "users"), {
+    //       name,
+    //       username,
+    //     });
+    //     console.log("Document written with ID: ", docRef.id);
+    //     navigate(HomeScreen)
+    //     setLoggedUser(username);
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   return (
     <>
+    <PlantListManager />
       <SearchCameraBar />
     <ImageBackground
       resizeMode="stretch"
