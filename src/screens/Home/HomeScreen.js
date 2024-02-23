@@ -9,8 +9,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { StackScreens } from "../../../App.screens";
-// import { db } from "../../../firebaseConfig";
-// import { collection, getDocs, query, where } from "firebase/firestore"
 
 export const HomeScreen = () => {
   const { navigate } = useNavigation();

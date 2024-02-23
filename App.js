@@ -37,7 +37,7 @@ export const DrawerScreens = {
   AppStack: "AppStack",
 };
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent({ loggedInUser, setLoggedInUser, ...props }) {
   const { navigate } = useNavigation();
   return (
     <DrawerContentScrollView {...props}>
@@ -53,7 +53,7 @@ function CustomDrawerContent(props) {
               { fontFamily: "GT-Eesti-Display-Medium-Trial" },
             ]}
           >
-            Hi, Buddy!✨
+            Hi {loggedInUser.name}!✨
           </Text>
         </View>
       </View>
@@ -79,7 +79,8 @@ function CustomDrawerContent(props) {
       <DrawerItem
         label="Log out"
         onPress={() => {
-          //should log out
+          setLoggedInUser(null);
+          navigate(StackScreens.Login);
         }}
       />
     </DrawerContentScrollView>
@@ -152,7 +153,10 @@ export default function App() {
   }, [appIsReady]);
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [loggedUser, setLoggedUser] = useState({});
+  const [loggedInUser, setLoggedInUser] = useState({
+    name: "Buddy",
+    username: "BuddyHolly",
+  });
 
   useEffect(() => {
     requestPermission();
@@ -170,20 +174,33 @@ export default function App() {
   }
 
   return (
-    <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
+    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
       <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
         <NavigationContainer>
-          <Drawer.Navigator
-            initialRouteName={DrawerScreens.AppStack}
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
-          >
-            <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
-          </Drawer.Navigator>
+          {loggedInUser ? (
+            <Drawer.Navigator
+              initialRouteName={DrawerScreens.AppStack}
+              drawerContent={(props) => (
+                <CustomDrawerContent
+                  loggedInUser={loggedInUser}
+                  setLoggedInUser={setLoggedInUser}
+                  {...props}
+                />
+              )}
+            >
+              <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
+            </Drawer.Navigator>
+          ) : (
+            <Stack.Navigator initialRouteName={StackScreens.Login}>
+              <Stack.Screen name={StackScreens.Login} component={LoginScreen} />
+            </Stack.Navigator>
+          )}
         </NavigationContainer>
       </SafeAreaView>
     </UserContext.Provider>
   );
 }
+
 const styles = StyleSheet.create({
   greetingContainer: {
     alignItems: "center",

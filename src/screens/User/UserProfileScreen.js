@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
+import UserContext from "../../../context/UserContext";
 
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
+  const { loggedInUser } = useContext(UserContext);
 
   return (
     <ImageBackground
@@ -20,14 +22,14 @@ export const UserProfileScreen = () => {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>User Profile Screen</Text>
+          <Text style={styles.text}>{loggedInUser.name} Profile Screen</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => navigate(StackScreens.HomeScreen)}
               style={styles.button}

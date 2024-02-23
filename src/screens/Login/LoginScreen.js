@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -12,11 +12,20 @@ import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import { db } from "../../../firebaseConfig";
 import { query, where, getDocs, collection } from "firebase/firestore";
+import UserContext from "../../../context/UserContext";
+
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  useEffect(() => {
+    if (loggedInUser) {
+      navigate(StackScreens.UserProfileScreen);
+    }
+  }, [loggedInUser]);
 
   const handleLogin = async () => {
     const q = query(collection(db, "users"), where("username", "==", username));
@@ -28,10 +37,17 @@ export const LoginScreen = () => {
         const userdata = doc.data();
         if (userdata.username) {
           setIsLoggingIn(true);
-          setTimeout(() => {
-            setIsLoggingIn(false);
-            navigate(StackScreens.UserProfileScreen);
-          }, 2000);
+          setLoggedInUser(userdata);
+
+          //Not sure we need this setTimeOut?
+          // setTimeout(() => {
+          //   setIsLoggingIn(false);
+          //   setLoggedInUser(userdata, () => {
+          //     console.log(userdata);
+          //     console.log(loggedInUser, "<--loggedInUser");
+          //     navigate(StackScreens.UserProfileScreen);
+          //   });
+          // }, 2000);
         }
       });
       setUsername("");
@@ -39,17 +55,6 @@ export const LoginScreen = () => {
       console.log(err);
     }
   };
-
-  // const handleLogin = () => {
-  //   // will add login logic here
-  //   setIsLoggingIn(true);
-  //   // authentication will be here
-  //   setTimeout(() => {
-  //     setIsLoggingIn(false);
-  //     // when login is successful it will go here
-  //     navigate("SignupScreen"); // navigate to SignupScreen after login
-  //   }, 2000);
-  // };
 
   const handleSignup = () => {
     // signup logic will go here
@@ -86,14 +91,14 @@ export const LoginScreen = () => {
             style={[styles.input, styles.roundedInput]}
             maxLength={50}
           />
-          <TextInput
+          {/* <TextInput
             placeholder="Password"
             value={password}
             onChangeText={(text) => setPassword(text)}
             style={[styles.input, styles.roundedInput]}
             maxLength={50}
             secureTextEntry={true}
-          />
+          /> */}
           <TouchableOpacity
             style={[styles.button, styles.loginButton]}
             onPress={handleLogin}
@@ -104,12 +109,12 @@ export const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={handleSignup}>
+          {/* <TouchableOpacity onPress={handleSignup}>
             <Text style={styles.signupText}>
               <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
               <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "red", marginTop: 40 }]}
@@ -119,15 +124,6 @@ export const LoginScreen = () => {
               Go to User Page(all screens are there)
             </Text>
           </TouchableOpacity>
-
-          {/* <Text
-          style={[
-            styles.tipText,
-            { fontFamily: "GT-Eesti-Text-UltraLight-Trial" },
-          ]}
-        >
-          Tip: Press the camera icon in the search bar to identify your plant!🌱
-        </Text> */}
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>

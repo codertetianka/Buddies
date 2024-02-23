@@ -21,7 +21,7 @@ export const SignupScreen = () => {
   const { navigate } = useNavigation();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const handleSignup = async () => {
     try {
@@ -40,7 +40,7 @@ export const SignupScreen = () => {
       const docRef = await addDoc(collection(db, "users"), { name, username });
       console.log("Document written with ID:", docRef.id);
       console.log("Navigating to plant list");
-      setLoggedUser(username);
+      setLoggedInUser(username);
     } catch (err) {
       console.log(err);
     }
