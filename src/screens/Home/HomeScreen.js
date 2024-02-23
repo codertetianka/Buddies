@@ -8,32 +8,35 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
+// import { db } from "../../../firebaseConfig";
+// import { collection, getDocs, query, where } from "firebase/firestore"
 
 export const HomeScreen = () => {
   const { navigate } = useNavigation();
 
   return (
-    <ImageBackground
-      resizeMode="cover"
-      source={require("../../../assets/splash.png")}
-      style={styles.background}
-    >
+    <>
       <SearchCameraBar />
-
-      <View style={styles.overlay}>
-        <View style={styles.container}>
-          <Text style={styles.text}>Home (featured plants) Screen</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => navigate("Login")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Back to Login</Text>
-            </TouchableOpacity>
+      <ImageBackground
+        resizeMode="cover"
+        source={require("../../../assets/splash.png")}
+        style={styles.background}
+      >
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            <Text style={styles.text}>Home (featured plants) Screen</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => navigate("Login")}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Back to Login</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </>
   );
 };
 

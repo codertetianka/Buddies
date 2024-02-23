@@ -23,28 +23,23 @@ export const SignupScreen = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
 
   const handleSignup = async () => {
-    const q = query(collection(db, "users"), where("username", "==", username));
     try {
-      let isUserNew = true;
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username)
+      );
       const snapshot = await getDocs(q);
-      snapshot.forEach((doc) => {
-        // console.log(doc.id, '=>', doc.data())
-        const userData = doc.data();
-        if (userData.username) {
-          isUserNew = false;
-        }
-      });
-      if (!isUserNew) {
-        navigate("Home");
-      } else {
-        const docRef = await addDoc(collection(db, "users"), {
-          name,
-          username,
-        });
-        console.log("Document written with ID: ", docRef.id);
-        console.log("will navigate to plant list");
-        setLoggedUser(username);
+      if (!snapshot.empty) {
+        console.log("Username already exists");
+        navigate("Login");
+        return;
       }
+
+      console.log("Creating new user:", name, username);
+      const docRef = await addDoc(collection(db, "users"), { name, username });
+      console.log("Document written with ID:", docRef.id);
+      console.log("Navigating to plant list");
+      setLoggedUser(username);
     } catch (err) {
       console.log(err);
     }
@@ -52,7 +47,6 @@ export const SignupScreen = () => {
 
   return (
     <>
-      <SearchCameraBar />
       <ImageBackground
         resizeMode="stretch"
         source={backgroundImage}
@@ -90,7 +84,6 @@ export const SignupScreen = () => {
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => navigate("Login")}>
             <Text style={styles.signupText}>Back to Login</Text>
           </TouchableOpacity>
