@@ -7,6 +7,8 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import SearchCameraBar from "../Components/SearchCameraBar";
+import { StackScreens } from "../../../App.screens";
 
 export const UnidentifiedScreen = () => {
   const { navigate } = useNavigation();
@@ -19,10 +21,16 @@ export const UnidentifiedScreen = () => {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>Unidentified Plant Profile Screen</Text>
+          <Text style={styles.text}>
+            Ugh oh, we couldn't identify your plant!
+          </Text>
+          <Text style={styles.text}>
+            Try searching for your plant or taking another photo:
+          </Text>
+          <SearchCameraBar />
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>

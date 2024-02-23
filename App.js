@@ -2,8 +2,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState, useCallback } from "react";
 import { Camera, CameraType } from "expo-camera";
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+} from "@react-navigation/drawer";
 import { LoginScreen } from "./src/screens/Login/LoginScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -14,44 +19,124 @@ import { IdentifiedScreen } from "./src/screens/Plants/IdentifiedScreen";
 import { UnidentifiedScreen } from "./src/screens/Plants/UnidentifiedScreen";
 import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import UserContext from "./context/UserContext";
+import "react-native-gesture-handler";
 import { CameraComponent } from "./src/screens/Components/CameraComponent";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StackScreens } from "./App.screens";
+import { fonts } from "./fonts";
+import { Image } from "react-native";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
-const Stack = createNativeStackNavigator();
+export const Stack = createNativeStackNavigator();
+
+const Drawer = createDrawerNavigator();
+
+export const DrawerScreens = {
+  AppStack: "AppStack",
+};
+
+function CustomDrawerContent({ loggedInUser, setLoggedInUser, ...props }) {
+  const { navigate } = useNavigation();
+  return (
+    <DrawerContentScrollView {...props}>
+      <View style={styles.avatarContainer}>
+        <Image
+          source={require("./assets/avatar.jpg")}
+          style={styles.avatarImage}
+        />
+        <View style={styles.greetingContainer}>
+          <Text
+            style={[
+              styles.greetingText,
+              { fontFamily: "GT-Eesti-Display-Medium-Trial" },
+            ]}
+          >
+            Hi {loggedInUser.name}!✨
+          </Text>
+        </View>
+      </View>
+
+      <DrawerItem
+        label="View Profile"
+        onPress={() => {
+          navigate(StackScreens.UserProfileScreen);
+        }}
+      />
+      <DrawerItem
+        label="Browse Plants"
+        onPress={() => {
+          navigate(StackScreens.HomeScreen);
+        }}
+      />
+      <DrawerItem
+        label="Change Profile"
+        onPress={() => {
+          navigate(StackScreens.Login);
+        }}
+      />
+      <DrawerItem
+        label="Log out"
+        onPress={() => {
+          setLoggedInUser(null);
+          navigate(StackScreens.Login);
+        }}
+      />
+    </DrawerContentScrollView>
+  );
+}
+
+const AppStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name={StackScreens.HomeScreen}
+      component={HomeScreen}
+      options={{ title: "Home Screen", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.Login}
+      component={LoginScreen}
+      options={{ title: "Login", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.SignupScreen}
+      component={SignupScreen}
+      options={{ title: "Sign Up", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.UserProfileScreen}
+      component={UserProfileScreen}
+      options={{ title: "User Profile", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.PlantProfileScreen}
+      component={PlantProfileScreen}
+      options={{ title: "Plant Profile", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.IdentifiedScreen}
+      component={IdentifiedScreen}
+      options={{ title: "Indetified Screen", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.UnidentifiedScreen}
+      component={UnidentifiedScreen}
+      options={{
+        title: "Unidentified Screen",
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name={StackScreens.CameraComponent}
+      component={CameraComponent}
+      options={{ title: "Camera", headerShown: false }}
+    />
+  </Stack.Navigator>
+);
 
 export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    "GT-Eesti-Display-Bold-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Bold-Italic-Trial.otf"),
-    "GT-Eesti-Display-Bold-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Bold-Trial.otf"),
-    "GT-Eesti-Display-Light-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Light-Italic-Trial.otf"),
-    "GT-Eesti-Display-Light-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Light-Trial.otf"),
-    "GT-Eesti-Display-Medium-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Medium-Italic-Trial.otf"),
-    "GT-Eesti-Display-Medium-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Medium-Trial.otf"),
-    "GT-Eesti-Display-Regular-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Regular-Italic-Trial.otf"),
-    "GT-Eesti-Display-Regular-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Regular-Trial.otf"),
-    "GT-Eesti-Display-Thin-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Thin-Italic-Trial.otf"),
-    "GT-Eesti-Display-Thin-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-Thin-Trial.otf"),
-    "GT-Eesti-Display-UltraBold-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Italic-Trial.otf"),
-    "GT-Eesti-Display-UltraBold-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Trial.otf"),
-    "GT-Eesti-Display-UltraLight-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Italic-Trial.otf"),
-    "GT-Eesti-Display-UltraLight-Trial": require("./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Trial.otf"),
-    "GT-Eesti-Text-Bold-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Bold-Italic-Trial.otf"),
-    "GT-Eesti-Text-Bold-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Bold-Trial.otf"),
-    "GT-Eesti-Text-Book-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Book-Italic-Trial.otf"),
-    "GT-Eesti-Text-Book-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Book-Trial.otf"),
-    "GT-Eesti-Text-Light-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Light-Italic-Trial.otf"),
-    "GT-Eesti-Text-Light-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Light-Trial.otf"),
-    "GT-Eesti-Text-Medium-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Medium-Italic-Trial.otf"),
-    "GT-Eesti-Text-Medium-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Medium-Trial.otf"),
-    "GT-Eesti-Text-Regular-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Regular-Italic-Trial.otf"),
-    "GT-Eesti-Text-Regular-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Regular-Trial.otf"),
-    "GT-Eesti-Text-Thin-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Thin-Italic-Trial.otf"),
-    "GT-Eesti-Text-Thin-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-Thin-Trial.otf"),
-    "GT-Eesti-Text-ULight-Italic-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-ULight-Italic-Trial.otf"),
-    "GT-Eesti-Text-UltraLight-Trial": require("./assets/GT-Eesti/GT-Eesti-Text-UltraLight-Trial.otf"),
-  });
+  const [fontsLoaded, fontError] = useFonts(fonts);
 
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -63,17 +148,15 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [loggedUser, setLoggedUser] = useState({});
+  const [loggedInUser, setLoggedInUser] = useState({
+    name: "Buddy",
+    username: "BuddyHolly",
+  });
 
   useEffect(() => {
     requestPermission();
@@ -93,54 +176,63 @@ export default function App() {
   }
 
   return (
-    <UserContext.Provider value={{ loggedUser, setLoggedUser }}>
-    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="HomeScreen"
-            component={HomeScreen}
-            options={{ title: "Home Screen", headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ title: "Login", headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignupScreen"
-            component={SignupScreen}
-            options={{ title: "Sign Up", headerShown: false }}
-          />
-          <Stack.Screen
-            name="UserProfileScreen"
-            component={UserProfileScreen}
-            options={{ title: "User Profile", headerShown: false }}
-          />
-          <Stack.Screen
-            name="PlantProfileScreen"
-            component={PlantProfileScreen}
-            options={{ title: "Plant Profile", headerShown: false }}
-          />
-          <Stack.Screen
-            name="IdentifiedScreen"
-            component={IdentifiedScreen}
-            options={{ title: "Indetified Screen", headerShown: false }}
-          />
-          <Stack.Screen
-            name="UnidentifiedScreen"
-            component={UnidentifiedScreen}
-            options={{ title: "Unidentified Screen", headerShown: false }}
-          />
-          <Stack.Screen
-              name="CameraComponent"
-              component={CameraComponent}
-              options={{ title: "Camera", headerShown: false }}
-            />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
-</UserContext.Provider>
-
+    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+      <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+        <NavigationContainer>
+          {loggedInUser ? (
+            <Drawer.Navigator
+              initialRouteName={DrawerScreens.AppStack}
+              drawerContent={(props) => (
+                <CustomDrawerContent
+                  loggedInUser={loggedInUser}
+                  setLoggedInUser={setLoggedInUser}
+                  {...props}
+                />
+              )}
+            >
+              <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
+            </Drawer.Navigator>
+          ) : (
+            <Stack.Navigator initialRouteName={StackScreens.Login}>
+              <Stack.Screen name={StackScreens.Login} component={LoginScreen} />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+      </SafeAreaView>
+    </UserContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  greetingContainer: {
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  greetingText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  avatarContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  avatarImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  greetingContainer: {
+    flex: 1,
+  },
+  greetingText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
+  },
+});

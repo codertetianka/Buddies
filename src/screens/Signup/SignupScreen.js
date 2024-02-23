@@ -13,7 +13,7 @@ import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import SearchCameraBar from "../Components/SearchCameraBar";
-import { HomeScreen } from "../Home/HomeScreen";
+import { StackScreens } from "../../../App.screens";
 
 const backgroundImage = require("../../../assets/plantsign.png");
 
@@ -21,87 +21,77 @@ export const SignupScreen = () => {
   const { navigate } = useNavigation();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const { loggedUser, setLoggedUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const handleSignup = async () => {
-    console.log('signing up')
-    navigate('HomeScreen')
-    // const q = query(collection(db, "users"), where("username", "==", username));
-    // try {
-    //   let isUserNew = true;
-    //   const snapshot = await getDocs(q);
-    //   snapshot.forEach((doc) => {
-    //     // console.log(doc.id, '=>', doc.data())
-    //     const userData = doc.data();
-    //     if (userData.username) {
-    //       isUserNew = false;
-    //     }
-    //   });
-    //   if (!isUserNew) {
-    //     navigate("Home");
-    //   } else {
-    //     const docRef = await addDoc(collection(db, "users"), {
-    //       name,
-    //       username,
-    //     });
-    //     console.log("Document written with ID: ", docRef.id);
-    //     navigate(HomeScreen)
-    //     setLoggedUser(username);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username)
+      );
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        console.log("Username already exists");
+        navigate(StackScreens.Login);
+        return;
+      }
+
+      console.log("Creating new user:", name, username);
+      const docRef = await addDoc(collection(db, "users"), { name, username });
+      console.log("Document written with ID:", docRef.id);
+      console.log("Navigating to plant list");
+      setLoggedInUser(username);
+    } catch (err) {
+      console.log(err);
+    }
+
   };
 
   return (
     <>
-    <PlantListManager />
-      <SearchCameraBar />
-    <ImageBackground
-      resizeMode="stretch"
-      source={backgroundImage}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Text style={[styles.buddiesText]}>
-          Sign Up to{" "}
-          <Text
-            style={{
-              color: "#3bb162",
-              fontFamily: "GT-Eesti-Display-Medium-Trial",
-            }}
-          >
-            Buddies!
+      <ImageBackground
+        resizeMode="stretch"
+        source={backgroundImage}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <Text style={[styles.buddiesText]}>
+            Sign Up to{" "}
+            <Text
+              style={{
+                color: "#3bb162",
+                fontFamily: "GT-Eesti-Display-Medium-Trial",
+              }}
+            >
+              Buddies!
+            </Text>
           </Text>
-        </Text>
 
-        <TextInput
-          placeholder="What's your name?"
-          value={name}
-          onChangeText={(text) => setName(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
-        <TextInput
-          placeholder="What's your username?"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
+          <TextInput
+            placeholder="What's your name?"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
+          <TextInput
+            placeholder="What's your username?"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
 
-        <TouchableOpacity
-          style={[styles.button, styles.loginButton]}
-          onPress={handleSignup}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigate("Login")}>
-          <Text style={styles.signupText}>Back to Login</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+          <TouchableOpacity
+            style={[styles.button, styles.loginButton]}
+            onPress={handleSignup}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate(StackScreens.Login)}>
+            <Text style={styles.signupText}>Back to Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </>
-
   );
 };
 
