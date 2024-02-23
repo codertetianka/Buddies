@@ -3,7 +3,8 @@ import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
 import Button from "./Buttons";
-// import { getPlant } from "../API/api";
+import { getPlant } from "../API/api";
+import { useNavigation } from "@react-navigation/native";
 
 export const CameraComponent = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -12,6 +13,7 @@ export const CameraComponent = () => {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const cameraRef = useRef(null);
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -41,8 +43,15 @@ export const CameraComponent = () => {
       try {
         await MediaLibrary.createAssetAsync(image);
         alert("Picture saved!");
-        //make call to node backend here (below was attempted api call to plantnet api)
-        // getPlant(image);
+
+        const apiResults = await getPlant(image);
+        apiResults.is_plant === false
+          ? navigate("UnidentifiedScreen")
+          : navigate("IdentifiedScreen", {
+              image: image,
+              suggestions: apiResults.suggestions,
+              dateTaken: apiResults.meta_data.date,
+            });
         setImage(null);
       } catch (e) {
         console.log(e);

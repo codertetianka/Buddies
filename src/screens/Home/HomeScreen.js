@@ -14,40 +14,6 @@ import SearchCameraBar from "../Components/SearchCameraBar";
 export const HomeScreen = () => {
   const { navigate } = useNavigation();
 
-  //   const [password, setPassword] = useState("");
-  //   const [username, setUsername] = useState("");
-  //   const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  //   const handleLogin = async () => {
-  //     const q = query(collection(db, "users"), where("username", "==", username));
-  //     try {
-  //       const snapshot = await getDocs(q)
-  //     snapshot.forEach((doc) => {
-  //     // console.log(doc.id, '=>', doc.data())
-  //     const userdata = doc.data()
-  //     if (userdata.username) {
-  //       console.log('will navigate to profile')
-  //     }
-  //     })
-  //     setUsername('')
-  //   }
-  // catch (err) {
-  //   console.log(err)
-  // }
-  //     setIsLoggingIn(true);
-  //     // authentication will be here
-  //     setTimeout(() => {
-  //       setIsLoggingIn(false);
-  //       // when login is successful it will go here
-  //       navigate("SignupScreen"); // navigate to SignupScreen after login
-  //     }, 2000);
-  //   };
-
-  //   const handleSignup = () => {
-  //     // signup logic will go here
-  //     navigate("SignupScreen"); // will navigate to SignupScreen after sign up as well
-  //   };
-
   return (
     <>
       <SearchCameraBar />

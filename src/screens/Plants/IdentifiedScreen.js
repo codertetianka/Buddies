@@ -5,11 +5,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
-export const IdentifiedScreen = () => {
+export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
+  const { image, suggestions, dateTaken } = route.params;
+  console.log(suggestions, "<<< Suggestions");
+  console.log(suggestions[0].plant_details, "<<< First Suggestion");
+  console.log(
+    suggestions[0].plant_details.structured_name,
+    "<<< First Suggestion"
+  );
+  console.log(image, "<<< Image");
+  console.log(dateTaken, "<< Date Taken");
 
   return (
     <ImageBackground
@@ -20,6 +31,32 @@ export const IdentifiedScreen = () => {
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.text}>Indentified Plant Profile Screen</Text>
+
+          <Image source={image} />
+          <Text>Date Taken: {dateTaken}</Text>
+          <Text>Suggested Plants:</Text>
+          <View>
+            {suggestions.map((suggestion) => {
+              return (
+                <View key={suggestion.id}>
+                  <Text>
+                    Scientific Name: {suggestion.plant_details.scientific_name}
+                  </Text>
+                  <Text>Probability: {suggestion.probability}</Text>
+                  <View>
+                    <Feather
+                      name="plus-square"
+                      size={20}
+                      color="black"
+                      style={{ marginLeft: 1 }}
+                      // onPress={handleCameraPress} // change to handle adding to profile
+                    />
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => navigate("Login")}
