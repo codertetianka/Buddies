@@ -49,7 +49,7 @@ export const CameraComponent = () => {
         apiResults.is_plant === false
           ? navigate(StackScreens.UnidentifiedScreen)
           : navigate(StackScreens.IdentifiedScreen, {
-              image: image,
+              imageUrl: apiResults.images[0].url,
               suggestions: apiResults.suggestions,
               dateTaken: apiResults.meta_data.date,
             });

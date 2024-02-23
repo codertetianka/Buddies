@@ -11,6 +11,8 @@ export const getPlant = async (plantPic) => {
     const data = {
       api_key: apiKey,
       images: [fileContent],
+      modifiers: ["similar_images"],
+      plant_details: ["common_names"],
     };
 
     const response = await fetch("https://api.plant.id/v2/identify", {
