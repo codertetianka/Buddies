@@ -23,34 +23,30 @@ export const SignupScreen = () => {
   const { loggedUser, setLoggedUser } = useContext(UserContext);
 
   const handleSignup = async () => {
-    const q = query(collection(db, "users"), where("username", "==", username));
     try {
-      let isUserNew = true;
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", username)
+      );
       const snapshot = await getDocs(q);
-      snapshot.forEach((doc) => {
-        // console.log(doc.id, '=>', doc.data())
-        const userData = doc.data();
-        if (userData.username) {
-          isUserNew = false;
-        }
-      });
-      if (!isUserNew) {
-        navigate("Home");
-      } else {
-        const docRef = await addDoc(collection(db, "users"), {
-          name,
-          username,
-        });
-        console.log("Document written with ID: ", docRef.id);
-        console.log("will navigate to plant list");
-        setLoggedUser(username);
+      if (!snapshot.empty) {
+        console.log("Username already exists");
+        navigate("Login");
+        return;
       }
+
+      console.log("Creating new user:", name, username);
+      const docRef = await addDoc(collection(db, "users"), { name, username });
+      console.log("Document written with ID:", docRef.id);
+      console.log("Navigating to plant list");
+      setLoggedUser(username);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
+<>
     <ImageBackground
       resizeMode="stretch"
       source={backgroundImage}
@@ -66,34 +62,34 @@ export const SignupScreen = () => {
             }}
           >
             Buddies!
+            </Text>
           </Text>
-        </Text>
 
-        <TextInput
-          placeholder="What's your name?"
-          value={name}
-          onChangeText={(text) => setName(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
-        <TextInput
-          placeholder="What's your username?"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          style={[styles.input, styles.roundedInput]}
-        />
+          <TextInput
+            placeholder="What's your name?"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
+          <TextInput
+            placeholder="What's your username?"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={[styles.input, styles.roundedInput]}
+          />
 
-        <TouchableOpacity
-          style={[styles.button, styles.loginButton]}
-          onPress={handleSignup}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-
+          <TouchableOpacity
+            style={[styles.button, styles.loginButton]}
+            onPress={handleSignup}
+          >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
         <TouchableOpacity onPress={() => navigate("Login")}>
           <Text style={styles.signupText}>Back to Login</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
+    </>
   );
 };
 
