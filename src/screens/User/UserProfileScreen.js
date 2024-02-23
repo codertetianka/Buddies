@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { StackScreens } from "../../../App.screens";
 
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
@@ -22,36 +23,22 @@ export const UserProfileScreen = () => {
           <Text style={styles.text}>User Profile Screen</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigate("HomeScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to Home page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigate("PlantProfileScreen")}
+              onPress={() => navigate(StackScreens.HomeScreen)}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to Home page</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate(StackScreens.PlantProfileScreen)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to plant profile page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("IdentifiedScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to identified plant page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate("UnidentifiedScreen")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>
-                Go to unidentified plant page
-              </Text>
             </TouchableOpacity>
           </View>
         </View>

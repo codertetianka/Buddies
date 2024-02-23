@@ -30,7 +30,7 @@ export const LoginScreen = () => {
           setIsLoggingIn(true);
           setTimeout(() => {
             setIsLoggingIn(false);
-            navigate("UserProfileScreen");
+            navigate(StackScreens.UserProfileScreen);
           }, 2000);
         }
       });

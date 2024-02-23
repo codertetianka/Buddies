@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { StackScreens } from "../../../App.screens";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
@@ -59,7 +60,7 @@ export const IdentifiedScreen = ({ route }) => {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>

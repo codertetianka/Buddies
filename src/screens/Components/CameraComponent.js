@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "./Buttons";
 import { getPlant } from "../API/api";
 import { useNavigation } from "@react-navigation/native";
+import { StackScreens } from "../../../App.screens";
 
 export const CameraComponent = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -46,8 +47,8 @@ export const CameraComponent = () => {
 
         const apiResults = await getPlant(image);
         apiResults.is_plant === false
-          ? navigate("UnidentifiedScreen")
-          : navigate("IdentifiedScreen", {
+          ? navigate(StackScreens.UnidentifiedScreen)
+          : navigate(StackScreens.IdentifiedScreen, {
               image: image,
               suggestions: apiResults.suggestions,
               dateTaken: apiResults.meta_data.date,

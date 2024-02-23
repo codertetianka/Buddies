@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { StackScreens } from "../../../App.screens";
 
 const backgroundImage = require("../../../assets/plantsign.png");
 
@@ -31,7 +32,7 @@ export const SignupScreen = () => {
       const snapshot = await getDocs(q);
       if (!snapshot.empty) {
         console.log("Username already exists");
-        navigate("Login");
+        navigate(StackScreens.Login);
         return;
       }
 
@@ -84,7 +85,7 @@ export const SignupScreen = () => {
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate("Login")}>
+          <TouchableOpacity onPress={() => navigate(StackScreens.Login)}>
             <Text style={styles.signupText}>Back to Login</Text>
           </TouchableOpacity>
         </View>
