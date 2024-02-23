@@ -162,6 +162,8 @@ export default function App() {
     requestPermission();
   }, []);
 
+  // console.log("[App]", { fontsLoaded, fontError });
+
   if (!appIsReady) {
     return null;
   }

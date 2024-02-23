@@ -44,6 +44,7 @@ export const SignupScreen = () => {
     } catch (err) {
       console.log(err);
     }
+
   };
 
   return (
