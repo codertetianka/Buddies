@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { StackScreens } from "../../../App.screens";
 // import { db } from "../../../firebaseConfig";
 // import { collection, getDocs, query, where } from "firebase/firestore"
 
@@ -27,7 +28,7 @@ export const HomeScreen = () => {
             <Text style={styles.text}>Home (featured plants) Screen</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                onPress={() => navigate("Login")}
+                onPress={() => navigate(StackScreens.Login)}
                 style={styles.button}
               >
                 <Text style={styles.buttonText}>Back to Login</Text>

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { StackScreens } from "../../../App.screens";
 
 export const UnidentifiedScreen = () => {
   const { navigate } = useNavigation();
@@ -29,7 +30,7 @@ export const UnidentifiedScreen = () => {
           <SearchCameraBar />
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>

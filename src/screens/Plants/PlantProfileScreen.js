@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { StackScreens } from "../../../App.screens";
 
 export const PlantProfileScreen = () => {
   const { navigate } = useNavigation();
@@ -22,7 +23,7 @@ export const PlantProfileScreen = () => {
           <Text style={styles.text}>Plant Profile Screen</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => navigate(StackScreens.Login)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Back to Login</Text>
