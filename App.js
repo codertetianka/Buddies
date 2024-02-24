@@ -195,6 +195,10 @@ export default function App() {
           ) : (
             <Stack.Navigator initialRouteName={StackScreens.Login}>
               <Stack.Screen name={StackScreens.Login} component={LoginScreen} />
+              <Stack.Screen
+                name={StackScreens.SignupScreen}
+                component={SignupScreen}
+              />
             </Stack.Navigator>
           )}
         </NavigationContainer>
