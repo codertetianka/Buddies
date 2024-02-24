@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,21 +12,30 @@ import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { FindMatchingPlants } from "./FindMatchingPlants";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { imageUrl, suggestions, dateTaken } = route.params;
-  // console.log(suggestions, "<<< Suggestions");
-  console.log(
-    suggestions[0].similar_images,
-    "<<< First Suggestion Similar Images"
-  );
-  console.log(
-    suggestions[0].similar_images[0].url_small,
-    "<<< First Suggestion Similar Images Small "
-  );
 
-  console.log(imageUrl, "<<< Image");
+  const handleAddPlant = (scientificName) => {
+    // getting invalid hooks call error when pressing +
+    // console.log(scientificName); //works!
+    // console.log(imageUrl, "<<< Image"); // works!
+    // console.log(dateTaken, "<<< Date taken"); // works!
+    const foundPlant = FindMatchingPlants(scientificName);
+    // maybe use these if statements to create alerts that the plant has been added to their profile or not?
+    if (foundPlant !== null) {
+    } else {
+      console.log("Plant not found with scientific name:", scientificName);
+    }
+
+    // Call the FindMatchingPlant - filter the response to only include the plant with the same scientific name
+    // create object with imageUrl, date taken, watering and sun info
+    // send selected plant info object to firebase database (map in firebase equv to obj)
+    // navigate to plant profile - errors for some reason when we change to plant profile
+    navigate(StackScreens.UserProfileScreen);
+  };
 
   return (
     <ImageBackground
@@ -66,7 +75,9 @@ export const IdentifiedScreen = ({ route }) => {
                       size={20}
                       color="black"
                       style={{ marginLeft: 1 }}
-                      // onPress={handleCameraPress} // change to handle adding to profile
+                      onPress={() =>
+                        handleAddPlant(suggestion.plant_details.scientific_name)
+                      } // change to handle adding to profile
                     />
                   </View>
                 </View>
