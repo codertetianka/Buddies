@@ -25,6 +25,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StackScreens } from "./App.screens";
 import { fonts } from "./fonts";
 import { Image } from "react-native";
+import { db } from "./firebaseConfig";
+import { query, where, getDocs, collection } from "firebase/firestore";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -152,11 +154,28 @@ export default function App() {
     }
   }, [appIsReady]);
 
+  useEffect(() => {
+    const fetchLoggedInUser = async () => {
+      try {
+        const q = query(
+          collection(db, "users"),
+          where("username", "==", "Fluffy-egg")
+        );
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          const userDoc = snapshot.docs[0].data();
+          setLoggedInUser(userDoc);
+        }
+      } catch (error) {
+        console.error("Error fetching loggedInUser:", error);
+      }
+    };
+
+    fetchLoggedInUser();
+  }, []);
+
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [loggedInUser, setLoggedInUser] = useState({
-    name: "Buddy",
-    username: "BuddyHolly",
-  });
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
     requestPermission();

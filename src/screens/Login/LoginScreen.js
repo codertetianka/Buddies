@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
+  ImageBackground,
   KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -13,7 +13,6 @@ import { StackScreens } from "../../../App.screens";
 import { db } from "../../../firebaseConfig";
 import { query, where, getDocs, collection } from "firebase/firestore";
 import UserContext from "../../../context/UserContext";
-import { AutoFocus } from "expo-camera";
 
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
@@ -39,16 +38,6 @@ export const LoginScreen = () => {
         if (userdata.username) {
           setIsLoggingIn(true);
           setLoggedInUser(userdata);
-
-          //Not sure we need this setTimeOut?
-          // setTimeout(() => {
-          //   setIsLoggingIn(false);
-          //   setLoggedInUser(userdata, () => {
-          //     console.log(userdata);
-          //     console.log(loggedInUser, "<--loggedInUser");
-          //     navigate(StackScreens.UserProfileScreen);
-          //   });
-          // }, 2000);
         }
       });
       setUsername("");
@@ -58,70 +47,76 @@ export const LoginScreen = () => {
   };
 
   const handleSignup = () => {
-    // signup logic will go here
-    // console.log("Signing up:", { name, username });
     navigate(StackScreens.SignupScreen); // will navigate to SignupScreen after sign up as well
   };
 
   return (
     <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Image
+        <ImageBackground
           resizeMode="stretch"
-          source={require("../../../assets/loginPlant.png")}
+          source={require("../../../assets/planttwo.png")}
           style={[
             styles.background,
             { backgroundColor: "rgba(255, 255, 255, 0.5)" },
           ]}
-        />
-        <Text
-          style={[
-            styles.buddiesText,
-            { fontFamily: "GT-Eesti-Display-Medium-Trial" },
-            { fontSize: 36 },
-          ]}
         >
-          Welcome back to your{" "}
-          <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
-        </Text>
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          style={[styles.input, styles.roundedInput]}
-          maxLength={50}
-        />
-        {/* <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={[styles.input, styles.roundedInput]}
-          maxLength={50}
-          secureTextEntry={true}
-        /> */}
-        <TouchableOpacity
-          style={[styles.button, styles.loginButton]}
-          onPress={handleLogin}
-          disabled={isLoggingIn}
-        >
-          <Text style={styles.buttonText}>
-            {isLoggingIn ? "Logging in..." : "Log In"}
+          <Text
+            style={[
+              styles.buddiesText,
+              { fontFamily: "GT-Eesti-Display-Medium-Trial" },
+              { fontSize: 36 },
+            ]}
+          >
+            Welcome back to your{" "}
+            <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSignup}>
-          <Text style={styles.signupText}>
-            <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
-            <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: "red", marginTop: 40 }]}
-          onPress={() => navigate(StackScreens.UserProfileScreen)}
-        >
-          <Text style={styles.buttonText}>
-            Go to User Page(all screens are there)
-          </Text>
-        </TouchableOpacity>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Username"
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+              style={[styles.input, styles.roundedInput]}
+              maxLength={50}
+            />
+
+            <TouchableOpacity
+              style={[styles.button, styles.loginButton]}
+              onPress={handleLogin}
+              disabled={isLoggingIn}
+            >
+              <Text style={styles.buttonText}>
+                {isLoggingIn ? "Logging in..." : "Log In"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleSignup}>
+              <Text style={styles.signupText}>
+                <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
+                <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "red", marginTop: 40 }]}
+              onPress={() => navigate(StackScreens.UserProfileScreen)}
+            >
+              <Text style={styles.buttonText}>
+                Go to User Page(all screens are there)
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={[styles.input, styles.roundedInput]}
+            maxLength={50}
+            secureTextEntry={true}
+          /> */}
+        </ImageBackground>
       </View>
     </KeyboardAvoidingView>
   );
@@ -131,13 +126,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   },
   background: {
-    width: "100%",
+    flex: 1,
     justifyContent: "center",
+  },
+  inputContainer: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   },
   input: {
+    paddingHorizontal: 20,
     marginBottom: 15,
     padding: 10,
     borderWidth: 1,
@@ -151,32 +152,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#def2e6",
   },
   buddiesText: {
-    height: "20%",
     paddingHorizontal: 20,
-    paddingTop: 20,
-    marginBottom: 25,
+    marginTop: "75%",
+    marginBottom: 45,
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
   },
   button: {
-    marginBottom: -40,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 25,
     borderRadius: 35,
     marginVertical: 12,
-    // width: "45%",
     minWidth: 150,
   },
   loginButton: {
     backgroundColor: "#1a6a45",
   },
   signupText: {
-    fontSize: 14,
-    marginVertical: 80,
-    marginBottom: -15,
+    fontSize: 17,
+    marginVertical: 30,
+    marginBottom: -20,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buttonText: {
