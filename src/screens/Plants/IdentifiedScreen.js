@@ -11,7 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();

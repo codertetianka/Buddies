@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 import { StackScreens } from "../../../App.screens";
 
 export const UnidentifiedScreen = () => {
