@@ -77,7 +77,7 @@ export const HomeScreen = () => {
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
-              plants: arrayUnion(plantData),
+              plants: arrayUnion(item),
             });
 
             alert("Plant has been added");

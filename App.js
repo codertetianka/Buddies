@@ -159,7 +159,7 @@ export default function App() {
       try {
         const q = query(
           collection(db, "users"),
-          where("username", "==", "Blossom ")
+          where("username", "==", "Flowers")
         );
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {

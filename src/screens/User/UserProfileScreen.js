@@ -5,7 +5,21 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Image,
+  FlatList,
+  SafeAreaView
 } from "react-native";
+import { db, storage } from "../../../firebaseConfig";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayUnion,
+} from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import UserContext from "../../../context/UserContext";
@@ -13,6 +27,55 @@ import UserContext from "../../../context/UserContext";
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
   const { loggedInUser } = useContext(UserContext);
+
+  const handleDelete = async (item) => {
+  try { 
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", loggedInUser.username)
+    )
+    const snapshot = await getDocs(q)
+    snapshot.forEach(async (user) => {
+      const userdata = user.data()
+      if (user.username) {
+        const plantRef = doc(db, "users", user.id)
+        await updateDoc(plantRef, {
+        plants: arrayRemove(item)
+    })
+    }
+    console.log('removed')
+  })
+} catch(err) {
+  console.log(err)
+}
+  alert("Plant has been deleted")
+  }
+  
+  const renderUserPlants = ({item}) => {
+    return (
+      <View>
+          {item.default_image?.original_url ? (
+            <Image
+              source={{ uri: item.default_image?.original_url }}
+              style={{height: 100, width: 100}}
+            />
+          ) : (
+            <Image
+              source={require("../../../images/hotwater.webp")}
+              style={{height: 100, width: 100}}
+            />
+          )}
+        <Text>
+          {item.common_name}
+        </Text>
+        <TouchableOpacity onPress={()=>handleDelete(item)}>
+          <Text>
+            remove
+          </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  } 
 
   return (
     <ImageBackground
@@ -23,6 +86,13 @@ export const UserProfileScreen = () => {
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.text}>{loggedInUser.name} Profile Screen</Text>
+          <SafeAreaView>
+            <FlatList
+            data={loggedInUser.plants}
+            renderItem={renderUserPlants}
+            keyExtractor={(item) => item.id.toString()}
+            />
+          </SafeAreaView>
           <View style={styles.buttonContainer}>
             {/* <TouchableOpacity
               onPress={() => navigate(StackScreens.Login)}
