@@ -14,7 +14,7 @@ import UserContext from "../../../context/UserContext";
 import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 import { StackScreens } from "../../../App.screens";
 
 const backgroundImage = require("../../../assets/plantsign.png");

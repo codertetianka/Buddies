@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import SearchCameraBar from "../components/SearchCameraBar";
+import SearchCameraBar from "../Components/SearchCameraBar";
 // import { StackScreens } from "../../../App.screens";
 import { data } from "./../../../data";
 
@@ -31,7 +31,7 @@ export const HomeScreen = () => {
   };
 
   const renderRowItem = ({ item, height, width, index }) => {
-    console.log("[item]", { index });
+    // console.log("[item]", { index });
     // if (!item.default_image) {
     //   console.log("[item]", { item });
     //   return null;
@@ -121,7 +121,7 @@ export const HomeScreen = () => {
 
   const containerHeight = containerLayout?.height;
   const containerWidth = containerLayout?.width;
-  console.log("[containerWidth]", containerLayout);
+  // console.log("[containerWidth]", containerLayout);
 
   const noOfColumns = 2;
   return (
