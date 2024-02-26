@@ -45,7 +45,7 @@ export const HomeScreen = () => {
   };
 
   const handlePress = async (item) => {
-    // console.log(item, "<--items");
+    console.log(item, "<--items");
     try {
       const q = query(
         collection(db, "users"),
@@ -54,17 +54,17 @@ export const HomeScreen = () => {
       const snapshot = await getDocs(q);
       snapshot.forEach(async (user) => {
         const userdata = user.data();
-        // console.log(userdata);
-        // console.log(user.id, "<--userDataID");
 
         if (userdata.username) {
           try {
-            const imageUrl = item.default_image.original_url;
-            const imageRef = ref(storage, `images/${user.id}`);
-            await uploadBytes(imageRef, imageUrl);
+            const imageUrl = await fetch(item.default_image.original_url);
+            const blob = await imageUrl.blob();
+
+            const imageRef = ref(storage, `images/${user.id}/${item.id}`);
+            await uploadBytes(imageRef, blob);
 
             const downloadUrl = await getDownloadURL(
-              ref(storage, `images/${user.id}`)
+              ref(storage, `images/${user.id}/${item.id}`)
             );
 
             const plantData = {};
@@ -77,10 +77,10 @@ export const HomeScreen = () => {
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
-              plants: arrayUnion(item),
+              plants: arrayUnion(plantData),
             });
 
-            alert("Plant has been added");
+            alert(`${item.common_name} has been added`);
 
             setLoggedInUser((currUser) => {
               return { ...currUser, plants: [...currUser.plants, plantData] };
