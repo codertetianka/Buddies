@@ -6,13 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import UserContext from "../../../context/UserContext";
 import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import SearchCameraBar from "../Components/SearchCameraBar";
+import SearchCameraBar from "../components/SearchCameraBar";
 import { StackScreens } from "../../../App.screens";
 
 const backgroundImage = require("../../../assets/plantsign.png");
@@ -44,68 +46,69 @@ export const SignupScreen = () => {
     } catch (err) {
       console.log(err);
     }
-
   };
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      style={{ flex: 1 }}
+    >
       <ImageBackground
         resizeMode="stretch"
         source={backgroundImage}
         style={styles.background}
       >
-        <View style={styles.container}>
-          <Text style={[styles.buddiesText]}>
-            Sign Up to{" "}
-            <Text
-              style={{
-                color: "#3bb162",
-                fontFamily: "GT-Eesti-Display-Medium-Trial",
-              }}
-            >
-              Buddies!
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            <Text style={styles.buddiesText}>
+              Sign Up to <Text style={styles.blackText}>Buddies!</Text>
             </Text>
-          </Text>
 
-          <TextInput
-            placeholder="What's your name?"
-            value={name}
-            onChangeText={(text) => setName(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
-          <TextInput
-            placeholder="What's your username?"
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-            style={[styles.input, styles.roundedInput]}
-          />
+            <TextInput
+              placeholder="What's your name?"
+              value={name}
+              onChangeText={(text) => setName(text)}
+              style={[styles.input, styles.roundedInput]}
+            />
+            <TextInput
+              placeholder="What's your username?"
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+              style={[styles.input, styles.roundedInput]}
+            />
 
-          <TouchableOpacity
-            style={[styles.button, styles.loginButton]}
-            onPress={handleSignup}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate(StackScreens.Login)}>
-            <Text style={styles.signupText}>Back to Login</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.loginButton]}
+              onPress={handleSignup}
+            >
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate(StackScreens.Login)}>
+              <Text style={styles.signupText}>Back to Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    position: "relative",
-    flex: 1,
-    alignItems: "center",
-    paddingTop: 380,
-  },
   background: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    width: "80%",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 300,
   },
   input: {
     marginBottom: 15,
@@ -121,7 +124,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#def2e6",
   },
   button: {
-    marginBottom: -40,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 16,
@@ -140,18 +142,22 @@ const styles = StyleSheet.create({
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
-    marginBottom: 92,
-    fontSize: 36,
+    marginBottom: 45,
+    fontSize: 27,
     fontWeight: "bold",
     textAlign: "center",
+    color: "black",
+    backgroundColor: "transparent",
+    padding: 10,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   signupText: {
-    color: "#136f44",
     fontSize: 17,
-    marginVertical: 90,
-    alignItems: "center",
-    marginBottom: -110,
+    color: "#ffffff",
+    marginTop: 20,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
+  },
+  blackText: {
+    color: "#000000", // Set text color to black
   },
 });

@@ -20,7 +20,7 @@ import { UnidentifiedScreen } from "./src/screens/Plants/UnidentifiedScreen";
 import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import UserContext from "./context/UserContext";
 import "react-native-gesture-handler";
-import { CameraComponent } from "./src/screens/Components/CameraComponent";
+import { CameraComponent } from "./src/screens/components/CameraComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackScreens } from "./App.screens";
 import { fonts } from "./fonts";
