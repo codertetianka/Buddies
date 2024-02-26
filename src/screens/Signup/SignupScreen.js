@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,15 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import UserContext from "../../../context/UserContext";
 import { useContext } from "react";
 import { db } from "../../../firebaseConfig";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import SearchCameraBar from "../Components/SearchCameraBar";
 import { StackScreens } from "../../../App.screens";
 
 const backgroundImage = require("../../../assets/plantsign.png");
@@ -24,6 +21,12 @@ export const SignupScreen = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+
+  useEffect(() => {
+    if (loggedInUser) {
+      navigate(StackScreens.UserProfileScreen);
+    }
+  }, [loggedInUser]);
 
   const handleSignup = async () => {
     try {
@@ -42,28 +45,32 @@ export const SignupScreen = () => {
       const docRef = await addDoc(collection(db, "users"), { name, username });
       console.log("Document written with ID:", docRef.id);
       console.log("Navigating to plant list");
-      setLoggedInUser(username);
+      setLoggedInUser({ id: docRef.id, name, username });
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : null}
-      style={{ flex: 1 }}
-    >
-      <ImageBackground
-        resizeMode="stretch"
-        source={backgroundImage}
-        style={styles.background}
-      >
-        <View style={styles.overlay}>
-          <View style={styles.container}>
-            <Text style={styles.buddiesText}>
-              Sign Up to <Text style={styles.blackText}>Buddies!</Text>
+    <>
+      <View style={styles.container}>
+        <ImageBackground
+          resizeMode="stretch"
+          source={backgroundImage}
+          style={styles.background}
+        >
+          <View style={styles.inputContainer}>
+            <Text style={[styles.buddiesText]}>
+              Sign Up to{" "}
+              <Text
+                style={{
+                  color: "#3bb162",
+                  fontFamily: "GT-Eesti-Display-Medium-Trial",
+                }}
+              >
+                Buddies!
+              </Text>
             </Text>
-
             <TextInput
               placeholder="What's your name?"
               value={name}
@@ -83,32 +90,33 @@ export const SignupScreen = () => {
             >
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => navigate(StackScreens.Login)}>
               <Text style={styles.signupText}>Back to Login</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   background: {
+    width: "100%",
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
+  inputContainer: {
+    flex: 1,
+    alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-  },
-  container: {
-    width: "80%",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 300,
+    marginTop: "30%",
   },
   input: {
     marginBottom: 15,
@@ -124,6 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#def2e6",
   },
   button: {
+    marginBottom: -40,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 16,
@@ -142,22 +151,18 @@ const styles = StyleSheet.create({
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buddiesText: {
-    marginBottom: 45,
-    fontSize: 27,
+    marginBottom: 40,
+    fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
-    color: "black",
-    backgroundColor: "transparent",
-    padding: 10,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   signupText: {
+    color: "#136f44",
     fontSize: 17,
-    color: "#ffffff",
-    marginTop: 20,
+    marginVertical: 90,
+    alignItems: "center",
+    marginBottom: -110,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
-  },
-  blackText: {
-    color: "#000000", // Set text color to black
   },
 });
