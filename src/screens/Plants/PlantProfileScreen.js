@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,18 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
+import { FindMatchingPlants } from "./FindMatchingPlants";
 
 export const PlantProfileScreen = () => {
   const { navigate } = useNavigation();
+
+  const scientificName = "Aeschynanthus";
+  const foundPlant = FindMatchingPlants(scientificName);
+  if (foundPlant !== null) {
+    console.log("Found plant:", foundPlant);
+  } else {
+    console.log("Plant not found with scientific name:", scientificName);
+  }
 
   return (
     <ImageBackground
