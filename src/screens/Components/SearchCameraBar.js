@@ -23,7 +23,7 @@ export default function SearchCameraBar() {
         <Feather name="search" size={25} color="black" />
         <TextInput
           style={styles.input}
-          placeholder="Search"
+          placeholder="Search for plants"
           value={searchPhrase}
           onChangeText={setSearchPhrase}
           onFocus={() => {
