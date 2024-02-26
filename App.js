@@ -218,6 +218,10 @@ export default function App() {
                 name={StackScreens.SignupScreen}
                 component={SignupScreen}
               />
+              <Stack.Screen
+                name={StackScreens.UserProfileScreen}
+                component={UserProfileScreen}
+              />
             </Stack.Navigator>
           )}
         </NavigationContainer>
