@@ -40,14 +40,15 @@ export const IdentifiedScreen = ({ route }) => {
   return (
     <ImageBackground
       resizeMode="cover"
-      source={require("../../../assets/splash.png")}
+      source={require("../../../images/bg3.jpg")}
       style={styles.background}
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>We think we have a match!</Text>
-          <Text>If not, try searching again:</Text>
           <SearchCameraBar />
+          <Text style={styles.text}>Top results</Text>
+          <Text>Not your plant? Try searching again</Text>
+
           <Image
             source={{ uri: imageUrl }}
             style={{ width: 150, height: 150 }}
