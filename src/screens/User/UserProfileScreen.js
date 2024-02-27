@@ -94,11 +94,8 @@ export const UserProfileScreen = () => {
     //define todays date in same format
     //return difference between todays date minus date added
     //if there is a dateTaken property for item (below) render the output of this function below.
-    let convertedDateTaken = null;
-    typeof date === "string"
-      ? (convertedDateTaken = new Date(date))
-      : (convertedDateTaken = date);
-    console.log(convertedDateTaken, "<<here");
+
+    const convertedDateTaken = new Date(date);
     const todaysDate = new Date();
 
     const timePassed = todaysDate.getTime() - convertedDateTaken.getTime();
