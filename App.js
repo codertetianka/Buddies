@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState, useCallback } from "react";
 import { Camera, CameraType } from "expo-camera";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -24,9 +24,10 @@ import { CameraComponent } from "./src/screens/Components/CameraComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackScreens } from "./App.screens";
 import { fonts } from "./fonts";
-import { Image } from "react-native";
 import { db } from "./firebaseConfig";
 import { query, where, getDocs, collection } from "firebase/firestore";
+import SearchResultsPage from "./src/screens/Plants/SearchResultsPage";
+import LogoImage from "./images/logo3.png";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -94,7 +95,20 @@ const AppStack = () => (
     <Stack.Screen
       name={StackScreens.HomeScreen}
       component={HomeScreen}
-      options={{ title: "Home Screen", headerShown: false }}
+      options={{
+        headerTitle: () => (
+          <View style={{ marginBottom: 120 }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 180 }}
+              resizeMode="contain"
+              marginTop={-65}
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
+      }}
     />
     <Stack.Screen
       name={StackScreens.Login}
@@ -133,6 +147,11 @@ const AppStack = () => (
       name={StackScreens.CameraComponent}
       component={CameraComponent}
       options={{ title: "Camera", headerShown: false }}
+    />
+    <Stack.Screen
+      name={StackScreens.SearchResultsPage}
+      component={SearchResultsPage}
+      options={{ title: "Search Results", headerShown: false }}
     />
   </Stack.Navigator>
 );
@@ -234,8 +253,6 @@ const styles = StyleSheet.create({
   greetingContainer: {
     alignItems: "center",
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
   },
   greetingText: {
     fontSize: 18,

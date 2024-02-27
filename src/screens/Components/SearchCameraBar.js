@@ -1,20 +1,32 @@
-import CameraComponent from "./CameraComponent";
-import React from "react";
-import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
-import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 
 export default function SearchCameraBar() {
   const { navigate } = useNavigation();
-  const [clicked, setClicked] = useState(false);
-  //searchPhrase will probs need to be moved higher and passed down as a prop
   const [searchPhrase, setSearchPhrase] = useState("");
 
   const handleCameraPress = () => {
-    //pressing the camera feather navigates to camera component
     navigate(StackScreens.CameraComponent);
+  };
+
+  const handleClearSearch = () => {
+    setSearchPhrase("");
+  };
+
+  const handleSearch = () => {
+    if (searchPhrase.trim() !== "") {
+      Keyboard.dismiss();
+      navigate(StackScreens.SearchResultsPage, { searchPhrase });
+    }
   };
 
   return (
@@ -26,49 +38,17 @@ export default function SearchCameraBar() {
           placeholder="Search for plants"
           value={searchPhrase}
           onChangeText={setSearchPhrase}
-          onFocus={() => {
-            // setClicked(true);
-          }}
+          onSubmitEditing={handleSearch}
         />
-        {clicked && (
-          <Entypo
-            name="cross"
-            size={20}
-            color="black"
-            style={{ padding: 1 }}
-            onPress={() => {
-              setSearchPhrase("");
-            }}
-          />
+        {searchPhrase !== "" && (
+          <TouchableOpacity onPress={handleClearSearch}>
+            <Entypo name="circle-with-cross" size={20} color="black" />
+          </TouchableOpacity>
         )}
       </View>
-
-      {clicked && (
-        <View>
-          {/* <Button
-            title="Cancel"
-            onPress={() => {
-              Keyboard.dismiss();
-              setClicked(false);
-            }}
-            style={{
-              backgroundColor: "skyblue",
-              padding: 10,
-              borderRadius: 5,
-              marginRight: 35,
-            }}
-          ></Button> */}
-        </View>
-      )}
-      <View>
-        <Feather
-          name="camera"
-          size={30}
-          color="black"
-          style={{ marginLeft: 1 }}
-          onPress={handleCameraPress}
-        />
-      </View>
+      <TouchableOpacity onPress={handleCameraPress}>
+        <Feather name="camera" size={28} color="black" margin={3} />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -81,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: "#def2e6",
-    borderRadius: 25,
+    borderRadius: 5,
   },
   searchBar: {
     flexDirection: "row",
@@ -91,12 +71,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    height: 40,
-  },
-  clearButton: {
-    marginLeft: 80,
-  },
-  cameraIcon: {
-    marginLeft: 10,
+    height: 15,
   },
 });
