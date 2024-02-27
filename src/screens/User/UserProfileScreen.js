@@ -89,27 +89,10 @@ export const UserProfileScreen = () => {
   };
 
   const handleStreakCounter = (date) => {
-    console.log(date, "<<date");
-    //convert our string date to useable format with date methods
-    //define todays date in same format
-    //return difference between todays date minus date added
-    //if there is a dateTaken property for item (below) render the output of this function below.
-
     const convertedDateTaken = new Date(date);
     const todaysDate = new Date();
-
     const timePassed = todaysDate.getTime() - convertedDateTaken.getTime();
-
-    let daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
-
-    console.log(
-      convertedDateTaken,
-      "convertedDateTaken",
-      todaysDate,
-      "<<<todaysDate",
-      daysPassed,
-      "<<<daysPassed"
-    );
+    const daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
     return daysPassed;
   };
 
@@ -128,14 +111,12 @@ export const UserProfileScreen = () => {
           />
         )}
         <Text>{item.common_name}</Text>
-        {item.date_added ? (
-          <View>
-            <Text>
-              You've kept your {item.common_name} alive for{" "}
-              {handleStreakCounter(item.date_added)} days!
-            </Text>
-          </View>
-        ) : null}
+        <View>
+          <Text>
+            You've kept your {item.common_name} alive for{" "}
+            {handleStreakCounter(item.date_added)} days!
+          </Text>
+        </View>
         <TouchableOpacity onPress={() => handleDelete(item)}>
           <Feather
             name="trash-2"

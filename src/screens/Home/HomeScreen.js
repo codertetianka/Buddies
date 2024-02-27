@@ -79,7 +79,6 @@ export const HomeScreen = () => {
               .toISOString()
               .toString()
               .slice(0, 10);
-            console.log(plantData.date_added, "<<<date_added");
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
