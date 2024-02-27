@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   SafeAreaView,
+  Platform
 } from "react-native";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -24,11 +25,101 @@ import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import UserContext from "../../../context/UserContext";
 import { deleteObject, ref } from "firebase/storage";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
 export const UserProfileScreen = () => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
   const { navigate } = useNavigation();
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [plants, setPlants] = useState([]);
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+    
+})
+
+  useEffect(() => {
+  registerForPushNotificationsAsync()
+  .then((token) => {
+    console.log(token, '<token')
+    setExpoPushToken(token)
+  });
+
+  notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    setNotification(notification);
+  });
+
+  responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+    console.log(response);
+  });
+
+  return () => {
+    Notifications.removeNotificationSubscription(notificationListener.current);
+    Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, [])
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+
+    if (Platform.OS === 'android') {
+        try {
+            await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+      });
+        } catch(err) {
+            console.log(err);
+        }
+      
+    }
+  
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e397f990-5892-44b7-8a51-e657bbb56bca' })).data;
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    return token;
+  }
+  
+  const sendNotification = async(plantName) => {
+  try {
+      await Notifications.scheduleNotificationAsync({
+       content: {
+         title: 'Time to water your plants',
+         body: `${plantName} needs watering`,
+       },
+       trigger: {day: 3}
+     });
+    }
+    catch(err) {
+      console.log(err)
+    }
+  }
+   
+  
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -105,6 +196,11 @@ export const UserProfileScreen = () => {
         <TouchableOpacity onPress={() => handleDelete(item)}>
           <Text>remove</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => sendNotification(item.common_name)}>
+          <Text>
+            set notification
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -148,7 +244,7 @@ export const UserProfileScreen = () => {
             >
               <Text style={styles.buttonText}>Go to plant profile page</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
+            <TouchableOpacity
 
               onPress={() => navigate(StackScreens.IdentifiedScreen)}
               style={styles.button}
