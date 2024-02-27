@@ -75,6 +75,8 @@ export const HomeScreen = () => {
               }
             }
             plantData.original_url = downloadUrl;
+            plantData.date_added = new Date();
+            console.log(plantData.date_added, "<<<typeof date_added");
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
