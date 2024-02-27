@@ -23,6 +23,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import UserContext from "../../../context/UserContext";
+import { deleteObject, ref } from "firebase/storage";
 
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
@@ -65,6 +66,9 @@ export const UserProfileScreen = () => {
             await updateDoc(plantRef, {
               plants: arrayRemove(item),
             });
+
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`); //delete photo from storage
+            await deleteObject(photoRef);
 
             const plants = userdata.plants;
 
