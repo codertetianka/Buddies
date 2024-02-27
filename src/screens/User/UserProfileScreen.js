@@ -87,23 +87,23 @@ export const UserProfileScreen = () => {
     alert(`${item.common_name} has been deleted`);
   };
 
-  const renderUserPlants = ({ item }) => {
+  const renderUserPlant = ({ item }) => {
     return (
-      <View>
+      <View style={styles.plantContainer}>
         {item.original_url ? (
           <Image
             source={{ uri: item.original_url }}
-            style={{ height: 100, width: 100 }}
+            style={styles.plantImage}
           />
         ) : (
           <Image
             source={require("../../../images/hotwater.webp")}
-            style={{ height: 100, width: 100 }}
+            style={styles.plantImage}
           />
         )}
-        <Text>{item.common_name}</Text>
+        <Text style={styles.plantName}>{item.common_name}</Text>
         <TouchableOpacity onPress={() => handleDelete(item)}>
-          <Text>remove</Text>
+          <Text style={styles.removeButton}>Remove</Text>
         </TouchableOpacity>
       </View>
     );
@@ -119,10 +119,10 @@ export const UserProfileScreen = () => {
         <View style={styles.container}>
           <Text style={styles.text}>{loggedInUser.name} Profile Screen</Text>
           {loggedInUser.plants ? (
-            <SafeAreaView>
+            <SafeAreaView style={styles.plantsContainer}>
               <FlatList
                 data={plants}
-                renderItem={renderUserPlants}
+                renderItem={renderUserPlant}
                 keyExtractor={(item) => item.id.toString()}
               />
             </SafeAreaView>
@@ -130,12 +130,6 @@ export const UserProfileScreen = () => {
             <Text>No plants added yet</Text>
           )}
           <View style={styles.buttonContainer}>
-            {/* <TouchableOpacity
-              onPress={() => navigate(StackScreens.Login)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Back to Login</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => navigate(StackScreens.HomeScreen)}
               style={styles.button}
@@ -148,8 +142,7 @@ export const UserProfileScreen = () => {
             >
               <Text style={styles.buttonText}>Go to plant profile page</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-
+            <TouchableOpacity
               onPress={() => navigate(StackScreens.IdentifiedScreen)}
               style={styles.button}
             >
@@ -184,8 +177,31 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#000",
   },
+  plantsContainer: {
+    marginTop: 10,
+  },
+  plantContainer: {
+    marginBottom: 20, // Adjust spacing between plants
+    alignItems: "left",
+  },
+  plantImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  plantName: {
+    fontSize: 16,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
+  },
+  removeButton: {
+    color: "red",
+    fontSize: 14,
+  },
   buttonContainer: {
     marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   button: {
     backgroundColor: "#1a6a45",

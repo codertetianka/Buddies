@@ -13,21 +13,18 @@ import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { plantListExample } from "../../../plant_id_output";
-
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { imageUrl, suggestions, dateTaken } = route.params;
   const [plantList, setPlantList] = useState([]);
   const [foundPlant, setFoundPlant] = useState(null); // when a matching plant is returned from perenial API
   const [scientificName, setScientificName] = useState(null); // set by pressing + button
-
   useEffect(() => {
     const fetchPlantData = async () => {
       try {
         // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
         // const plantData = await PlantListApi();
         // setPlantList(plantData);
-
         // for testing purposes, comment out when changing to using API call
         setPlantList(plantListExample);
       } catch (err) {
@@ -36,7 +33,6 @@ export const IdentifiedScreen = ({ route }) => {
     };
     fetchPlantData();
   }, []);
-
   const findMatchingPlant = async (scientificName) => {
     console.log(scientificName, "<< scientificName in findMatchingPlant");
     for (let i = 0; i < plantList.length; i++) {
@@ -52,30 +48,25 @@ export const IdentifiedScreen = ({ route }) => {
       }
     }
   };
-
   useEffect(() => {
     if (scientificName) {
       findMatchingPlant(scientificName);
     }
   }, [scientificName]);
-
   const handleAddPlant = (ScientificName) => {
     setScientificName(ScientificName);
   };
-
   useEffect(() => {
     if (foundPlant) {
       console.log(foundPlant, "<< foundPlant in handleAddPlant");
       navigate(StackScreens.UserProfileScreen);
     }
   }, [foundPlant, navigate]);
-
   // Call the FindMatchingPlant - filter the response to only include the plant with the same scientific name
   // create object with imageUrl, date taken, watering and sun info
   // send selected plant info object to firebase database (map in firebase equv to obj)
   // navigate to plant profile - errors for some reason when we change to plant profile
   // };
-
   return (
     <ImageBackground
       resizeMode="cover"
@@ -87,7 +78,6 @@ export const IdentifiedScreen = ({ route }) => {
           <SearchCameraBar />
           <Text style={styles.text}>Top results</Text>
           <Text>Not your plant? Try searching again</Text>
-
           <Image
             source={{ uri: imageUrl }}
             style={{ width: 150, height: 150 }}
@@ -126,7 +116,6 @@ export const IdentifiedScreen = ({ route }) => {
               );
             })}
           </ScrollView>
-
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => navigate(StackScreens.Login)}
@@ -140,7 +129,6 @@ export const IdentifiedScreen = ({ route }) => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -167,13 +155,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#1a6a45",
+    backgroundColor: "#1A6A45",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 25,
   },
   buttonText: {
-    color: "#ffffff",
+    color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
   },
