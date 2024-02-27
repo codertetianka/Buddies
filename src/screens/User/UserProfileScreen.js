@@ -136,7 +136,7 @@ export const UserProfileScreen = () => {
             >
               <Text style={styles.buttonText}>Back to Login</Text>
             </TouchableOpacity> */}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => navigate(StackScreens.HomeScreen)}
               style={styles.button}
             >
@@ -147,7 +147,7 @@ export const UserProfileScreen = () => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to plant profile page</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             {/* <TouchableOpacity
               onPress={() => navigate(StackScreens.IdentifiedScreen)}
               style={styles.button}
