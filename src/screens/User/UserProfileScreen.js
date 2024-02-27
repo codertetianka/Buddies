@@ -31,6 +31,7 @@ import Constants from 'expo-constants';
 
 export const UserProfileScreen = () => {
   const [expoPushToken, setExpoPushToken] = useState('');
+  const [notificationIdentifier, setNotificationIdentifier] = useState({})
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -50,7 +51,6 @@ export const UserProfileScreen = () => {
   useEffect(() => {
   registerForPushNotificationsAsync()
   .then((token) => {
-    console.log(token, '<token')
     setExpoPushToken(token)
   });
 
@@ -103,23 +103,42 @@ export const UserProfileScreen = () => {
   
     return token;
   }
-  
-  const sendNotification = async(plantName) => {
-  try {
-      await Notifications.scheduleNotificationAsync({
-       content: {
-         title: 'Time to water your plants',
-         body: `${plantName} needs watering`,
-       },
-       trigger: {day: 3}
-     });
+  const handleCancellation = async (plant) => {
+    try {
+        const cancel = await Notifications.cancelScheduledNotificationAsync(notificationIdentifier[plant.id])
+        setNotificationIdentifier((curr) => {
+          delete curr[plant.id]
+        })
     }
     catch(err) {
       console.log(err)
     }
   }
-   
-  
+
+  const sendNotification = async (plant) => {
+     const waterFrequency = { Minimum: 3, Average: 3, Frequent: 3 };
+     const dateWatered = new Date();
+     const nextWater = nextWater + dateWatered.setSeconds(
+     dateWatered.getSeconds() + waterFrequency[plant.watering]
+    );
+    try {
+      const identifier = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Time to water your plants",
+          body: `${plant.common_name} needs watering`,
+        },
+        trigger: { 
+          date: nextWater, 
+          repeats: true 
+        },
+      });
+      console.log(nextWater, 'nextwater')
+      console.log(dateWatered, 'datewatered')
+      setNotificationIdentifier({[plant.id]: identifier})
+    } catch (err) {
+      console.log(err);
+    } 
+  }
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -196,10 +215,12 @@ export const UserProfileScreen = () => {
         <TouchableOpacity onPress={() => handleDelete(item)}>
           <Text>remove</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => sendNotification(item.common_name)}>
-          <Text>
-            set notification
-          </Text>
+        <TouchableOpacity onPress={() => sendNotification(item)}>
+          <Text> set reminder </Text>
+          {/* {!isNotificationSet ? <Text>create nots</Text> : <Text>cancel nots</Text>} */}
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>handleCancellation(item)}>
+          <Text> delete </Text>
         </TouchableOpacity>
       </View>
     );
