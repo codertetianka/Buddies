@@ -8,18 +8,50 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
-import { FindMatchingPlants } from "./FindMatchingPlants";
+import { plantListExample } from "../../../plant_id_output";
 
 export const PlantProfileScreen = () => {
   const { navigate } = useNavigation();
+  const [plantList, setPlantList] = useState([]);
+  const [foundPlant, setFoundPlant] = useState(null);
+  const ScientificName = "Aeschynanthus";
 
-  const scientificName = "Aeschynanthus";
-  const foundPlant = FindMatchingPlants(scientificName);
-  if (foundPlant !== null) {
-    console.log("Found plant:", foundPlant);
-  } else {
-    console.log("Plant not found with scientific name:", scientificName);
-  }
+  useEffect(() => {
+    // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
+    // const fetchPlantData = async () => {
+    //   try {
+    //     const plantData = await PlantListApi();
+    //     setPlantList(plantData);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
+    // fetchPlantData();
+    setPlantList(plantListExample); // for testing purposes, comment out when changing to using API call
+  }, []);
+
+  useEffect(() => {
+    const findMatchingPlant = (scientificName) => {
+      for (let i = 0; i < plantList.length; i++) {
+        if (
+          plantList[i].scientific_name[0]
+            .toLowerCase()
+            .includes(scientificName.toLowerCase())
+        ) {
+          setFoundPlant(plantList[i]);
+          break;
+        }
+      }
+    };
+    findMatchingPlant(ScientificName);
+  }, [plantList]);
+
+  console.log(foundPlant, "<< found plant in plant profile screen");
+  // if (foundPlant !== null) {
+  //   console.log("Found plant:", foundPlant);
+  // } else {
+  //   console.log("Plant not found with scientific name:", scientificName);
+  // }
 
   return (
     <ImageBackground

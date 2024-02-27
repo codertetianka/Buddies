@@ -12,30 +12,69 @@ import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
 import SearchCameraBar from "../Components/SearchCameraBar";
-import { FindMatchingPlants } from "./FindMatchingPlants";
+import { plantListExample } from "../../../plant_id_output";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { imageUrl, suggestions, dateTaken } = route.params;
+  const [plantList, setPlantList] = useState([]);
+  const [foundPlant, setFoundPlant] = useState(null); // when a matching plant is returned from perenial API
+  const [scientificName, setScientificName] = useState(null); // set by pressing + button
 
-  const handleAddPlant = (scientificName) => {
-    // getting invalid hooks call error when pressing +
-    // console.log(scientificName); //works!
-    // console.log(imageUrl, "<<< Image"); // works!
-    // console.log(dateTaken, "<<< Date taken"); // works!
-    const foundPlant = FindMatchingPlants(scientificName);
-    // maybe use these if statements to create alerts that the plant has been added to their profile or not?
-    if (foundPlant !== null) {
-    } else {
-      console.log("Plant not found with scientific name:", scientificName);
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      try {
+        // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
+        // const plantData = await PlantListApi();
+        // setPlantList(plantData);
+
+        // for testing purposes, comment out when changing to using API call
+        setPlantList(plantListExample);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPlantData();
+  }, []);
+
+  const findMatchingPlant = async (scientificName) => {
+    console.log(scientificName, "<< scientificName in findMatchingPlant");
+    for (let i = 0; i < plantList.length; i++) {
+      console.log(plantList[i]);
+      if (
+        plantList[i].scientific_name[0]
+          .toLowerCase()
+          .includes(scientificName.toLowerCase())
+      ) {
+        console.log("in condition");
+        setFoundPlant(plantList[i]);
+        break;
+      }
     }
-
-    // Call the FindMatchingPlant - filter the response to only include the plant with the same scientific name
-    // create object with imageUrl, date taken, watering and sun info
-    // send selected plant info object to firebase database (map in firebase equv to obj)
-    // navigate to plant profile - errors for some reason when we change to plant profile
-    navigate(StackScreens.UserProfileScreen);
   };
+
+  useEffect(() => {
+    if (scientificName) {
+      findMatchingPlant(scientificName);
+    }
+  }, [scientificName]);
+
+  const handleAddPlant = (ScientificName) => {
+    setScientificName(ScientificName);
+  };
+
+  useEffect(() => {
+    if (foundPlant) {
+      console.log(foundPlant, "<< foundPlant in handleAddPlant");
+      navigate(StackScreens.UserProfileScreen);
+    }
+  }, [foundPlant, navigate]);
+
+  // Call the FindMatchingPlant - filter the response to only include the plant with the same scientific name
+  // create object with imageUrl, date taken, watering and sun info
+  // send selected plant info object to firebase database (map in firebase equv to obj)
+  // navigate to plant profile - errors for some reason when we change to plant profile
+  // };
 
   return (
     <ImageBackground
@@ -76,9 +115,11 @@ export const IdentifiedScreen = ({ route }) => {
                       size={20}
                       color="black"
                       style={{ marginLeft: 1 }}
-                      onPress={() =>
-                        handleAddPlant(suggestion.plant_details.scientific_name)
-                      } // change to handle adding to profile
+                      onPress={() => {
+                        handleAddPlant(
+                          suggestion.plant_details.scientific_name
+                        );
+                      }} // change to handle adding to profile
                     />
                   </View>
                 </View>
