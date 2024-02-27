@@ -149,11 +149,12 @@ export const UserProfileScreen = () => {
               <Text style={styles.buttonText}>Go to plant profile page</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity
+
               onPress={() => navigate(StackScreens.IdentifiedScreen)}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to Identified page</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
       </View>

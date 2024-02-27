@@ -141,7 +141,6 @@ export const HomeScreen = () => {
               paddingHorizontal: 6,
             }}
           >
-            {/* <Text style={styles.scientificName}>{item.scientific_name}</Text> */}
             <Text
               style={styles.commonName}
               numberOfLines={1}
@@ -158,7 +157,6 @@ export const HomeScreen = () => {
             >
               <View
                 style={{
-                  // flex: 1,
                   justifyContent: "center",
                   alignItems: "center",
                   borderRadius: 20,
@@ -180,7 +178,6 @@ export const HomeScreen = () => {
 
   const containerHeight = containerLayout?.height;
   const containerWidth = containerLayout?.width;
-  // console.log("[containerWidth]", containerLayout);
 
   const noOfColumns = 2;
   return (
@@ -228,9 +225,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemContainer: {
-    // paddingVertical: 12,
     paddingBottom: 0,
     padding: "4%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
   },
   image: {
     borderRadius: 8,
@@ -242,23 +239,16 @@ const styles = StyleSheet.create({
   //   fontFamily: "GT-Eesti-Display-Bold-Trial",
   // },
   commonName: {
-    // marginTop: 10,
     fontSize: 16,
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
-    color: "#1a6a45",
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
+    color: "black",
     padding: 6,
     flex: 1,
 
     borderRadius: 18,
   },
-  // featuredPlantsText: {
-  //   fontSize: 20,
-  //   fontFamily: "GT-Eesti-Display-Bold-Trial",
-  //   color: "#000",
-  // },
-  buttonPlus: {
-    // padding: 12,
 
+  buttonPlus: {
     padding: 6,
     justifyContent: "center",
     alignItems: "center",

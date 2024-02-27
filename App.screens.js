@@ -7,4 +7,5 @@ export const StackScreens = {
   IdentifiedScreen: "IdentifiedScreen",
   UnidentifiedScreen: "UnidentifiedScreen",
   CameraComponent: "CameraComponent ",
+  SearchResultsPage: "SearchResultsPage",
 };
