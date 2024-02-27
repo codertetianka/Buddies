@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,20 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayUnion,
+} from "firebase/firestore";
+import { db, storage } from "../../../firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
+import UserContext from "../../../context/UserContext";
 import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
 import SearchCameraBar from "../Components/SearchCameraBar";
@@ -16,10 +29,11 @@ import { plantListExample } from "../../../plant_id_output";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
-  const { imageUrl, suggestions, dateTaken } = route.params;
+  const { savedImageUrl, suggestions, dateTaken } = route.params;
   const [plantList, setPlantList] = useState([]);
   const [foundPlant, setFoundPlant] = useState(null); // when a matching plant is returned from perenial API
   const [scientificName, setScientificName] = useState(null); // set by pressing + button
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   useEffect(() => {
     const fetchPlantData = async () => {
@@ -38,15 +52,12 @@ export const IdentifiedScreen = ({ route }) => {
   }, []);
 
   const findMatchingPlant = async (scientificName) => {
-    console.log(scientificName, "<< scientificName in findMatchingPlant");
     for (let i = 0; i < plantList.length; i++) {
-      console.log(plantList[i]);
       if (
         plantList[i].scientific_name[0]
           .toLowerCase()
           .includes(scientificName.toLowerCase())
       ) {
-        console.log("in condition");
         setFoundPlant(plantList[i]);
         break;
       }
@@ -59,22 +70,91 @@ export const IdentifiedScreen = ({ route }) => {
     }
   }, [scientificName]);
 
-  const handleAddPlant = (ScientificName) => {
+  const handleMatchingPlant = (ScientificName) => {
     setScientificName(ScientificName);
+  };
+
+  const handleAddPlant = async (newPlant, photoDate, newPhoto) => {
+    //does foundPlant obj look different to item? no
+    //query the database user collection where the usernamne matches the loggedInUser (imported userContext)
+    //await getDocs to obtain the user info/data
+    //condition to check if there is a username in the returned userdata
+    //try block to
+    /*
+    -upload the photo taken to firebase storage
+    -download the picture?? what for
+    -creating an object for plantData
+    -iterating through keys within the foundPlant and copying them to new plantData object, ignoring copying of an existing image
+    -creating a new property in new plantData obj called original_url which is eqiuiv to img downloaded from firebase
+    - defining a variable to reference the user to attach plant info as an array to plants key in firebase user collection
+    - alert the user to say plant added to profile
+    - updating user state to amend their plant data to include the new plant data.
+    - catch block for errors ? user not found or logged in?
+    */
+    console.log(newPlant, "<--newPlant");
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", loggedInUser.username)
+      );
+      const snapshot = await getDocs(q);
+      snapshot.forEach(async (user) => {
+        const userdata = user.data();
+
+        if (userdata.username) {
+          try {
+            const imageUrl = await fetch(newPhoto);
+            const blob = await imageUrl.blob();
+
+            const imageRef = ref(storage, `images/${user.id}/${newPlant.id}`);
+            await uploadBytes(imageRef, blob);
+
+            const downloadUrl = await getDownloadURL(
+              ref(storage, `images/${user.id}/${newPlant.id}`)
+            );
+
+            const plantData = {};
+            for (const key in newPlant) {
+              if (!key.includes("image")) {
+                plantData[key] = newPlant[key];
+              }
+            }
+            plantData.original_url = downloadUrl;
+            plantData.date_added = photoDate;
+
+            const plantRef = doc(db, "users", user.id);
+            updateDoc(plantRef, {
+              plants: arrayUnion(plantData),
+            });
+
+            alert(`${newPlant.common_name} has been added`);
+
+            setLoggedInUser((currUser) => {
+              return { ...currUser, plants: [...currUser.plants, plantData] };
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     if (foundPlant) {
       console.log(foundPlant, "<< foundPlant in handleAddPlant");
+
+      //add foundPlant to firebase by invoking a function to handle add plant
+      //then navigate, then call from firebase to render in userProfile (handled in the next page)
+      handleAddPlant(foundPlant, dateTaken, savedImageUrl);
       navigate(StackScreens.UserProfileScreen);
     }
   }, [foundPlant, navigate]);
 
-  // Call the FindMatchingPlant - filter the response to only include the plant with the same scientific name
   // create object with imageUrl, date taken, watering and sun info
   // send selected plant info object to firebase database (map in firebase equv to obj)
-  // navigate to plant profile - errors for some reason when we change to plant profile
-  // };
 
   return (
     <ImageBackground
@@ -89,13 +169,14 @@ export const IdentifiedScreen = ({ route }) => {
           <Text>Not your plant? Try searching again</Text>
 
           <Image
-            source={{ uri: imageUrl }}
+            source={{ uri: savedImageUrl }}
             style={{ width: 150, height: 150 }}
           />
           <Text>Date Taken: {dateTaken}</Text>
           <Text>Suggested Plants:</Text>
           <ScrollView style={styles.scrollView}>
             {suggestions.map((suggestion) => {
+              console.log(suggestion, "<<<suggestion");
               return (
                 <View key={suggestion.id}>
                   <Image
@@ -105,9 +186,15 @@ export const IdentifiedScreen = ({ route }) => {
                   <Text>
                     Scientific Name: {suggestion.plant_details.scientific_name}
                   </Text>
-                  <Text>
-                    Common Name: {suggestion.plant_details.common_names[0]}
-                  </Text>
+                  {suggestion.plant_details.common_names ? (
+                    <Text>
+                      Common Name: {suggestion.plant_details.common_names[0]}
+                    </Text>
+                  ) : (
+                    <Text>
+                      Common Name: {suggestion.plant_details.scientific_name}
+                    </Text>
+                  )}
                   <Text>Probability: {suggestion.probability}</Text>
                   <View>
                     <Feather
@@ -116,7 +203,7 @@ export const IdentifiedScreen = ({ route }) => {
                       color="black"
                       style={{ marginLeft: 1 }}
                       onPress={() => {
-                        handleAddPlant(
+                        handleMatchingPlant(
                           suggestion.plant_details.scientific_name
                         );
                       }} // change to handle adding to profile

@@ -154,7 +154,7 @@ export const UserProfileScreen = () => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to Identified page</Text>
-            </TouchableOpacity>
+          </TouchableOpacity>*/}
           </View>
         </View>
       </View>
