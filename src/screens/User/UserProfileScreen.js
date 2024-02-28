@@ -50,7 +50,7 @@ export const UserProfileScreen = () => {
   //useEffect for handleStreak Counter that will update the useState for daysPassed or Streak?
   // useEffect(()=>{
 
-  // })
+  // }}
 
   useEffect(() => {
     const fetchPlants = async () => {
