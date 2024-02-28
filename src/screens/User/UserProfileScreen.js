@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -24,6 +25,8 @@ import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import UserContext from "../../../context/UserContext";
 import { deleteObject, ref } from "firebase/storage";
+
+const { width, height } = Dimensions.get("window");
 
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
@@ -67,15 +70,19 @@ export const UserProfileScreen = () => {
               plants: arrayRemove(item),
             });
 
-            const photoRef = ref(storage, `images/${user.id}/${item.id}`); //delete photo from storage
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
             await deleteObject(photoRef);
 
-            const plants = userdata.plants;
+            const updatedPlants = userdata.plants.filter(
+              (plant) => plant.id !== item.id
+            );
 
             setLoggedInUser((prevUser) => ({
               ...prevUser,
-              plants: plants,
+              plants: updatedPlants,
             }));
+
+            setPlants(updatedPlants);
           } catch (error) {
             console.log(error);
           }
@@ -84,27 +91,33 @@ export const UserProfileScreen = () => {
     } catch (err) {
       console.log(err);
     }
-    alert(`${item.common_name} has been deleted`);
   };
 
   const renderUserPlant = ({ item }) => {
+    const capitalizedPlantName =
+      item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
+
     return (
       <View style={styles.plantContainer}>
-        {item.original_url ? (
-          <Image
-            source={{ uri: item.original_url }}
-            style={styles.plantImage}
-          />
-        ) : (
-          <Image
-            source={require("../../../images/hotwater.webp")}
-            style={styles.plantImage}
-          />
-        )}
-        <Text style={styles.plantName}>{item.common_name}</Text>
-        <TouchableOpacity onPress={() => handleDelete(item)}>
-          <Text style={styles.removeButton}>Remove</Text>
-        </TouchableOpacity>
+        <View style={styles.imageContainer}>
+          {item.original_url ? (
+            <Image
+              source={{ uri: item.original_url }}
+              style={styles.plantImage}
+            />
+          ) : (
+            <Image
+              source={require("../../../images/hotwater.webp")}
+              style={styles.plantImage}
+            />
+          )}
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.plantName}>{capitalizedPlantName}</Text>
+          <TouchableOpacity onPress={() => handleDelete(item)}>
+            <Text style={styles.removeButton}>Remove</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -181,14 +194,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   plantContainer: {
-    marginBottom: 20, // Adjust spacing between plants
-    alignItems: "left",
+    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#def2e6",
+    borderRadius: 8,
+    width: width - 35,
+  },
+  imageContainer: {
+    width: width / 2.7,
+    height: (height / 6) * 1,
   },
   plantImage: {
-    height: 100,
-    width: 100,
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: "cover",
     borderRadius: 8,
     marginBottom: 5,
+  },
+  textContainer: {
+    marginLeft: 10,
   },
   plantName: {
     fontSize: 16,

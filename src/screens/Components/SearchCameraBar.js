@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Keyboard,
+  Platform,
 } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    height: 15,
+    height: Platform.OS === "ios" ? 40 : 35,
+    fontSize: 16,
   },
 });

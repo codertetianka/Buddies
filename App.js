@@ -96,13 +96,12 @@ const AppStack = () => (
       name={StackScreens.HomeScreen}
       component={HomeScreen}
       options={{
-        headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 180 }}
-              resizeMode="contain"
-              marginTop={-65}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
               border="none"
             />
           </View>
@@ -124,13 +123,12 @@ const AppStack = () => (
       name={StackScreens.UserProfileScreen}
       component={UserProfileScreen}
       options={{
-        headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 180 }}
-              resizeMode="contain"
-              marginTop={-65}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
               border="none"
             />
           </View>
@@ -147,13 +145,12 @@ const AppStack = () => (
       name={StackScreens.IdentifiedScreen}
       component={IdentifiedScreen}
       options={{
-        headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 180 }}
-              resizeMode="contain"
-              marginTop={-65}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
               border="none"
             />
           </View>
@@ -165,13 +162,12 @@ const AppStack = () => (
       name={StackScreens.UnidentifiedScreen}
       component={UnidentifiedScreen}
       options={{
-        headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 180 }}
-              resizeMode="contain"
-              marginTop={-65}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
               border="none"
             />
           </View>

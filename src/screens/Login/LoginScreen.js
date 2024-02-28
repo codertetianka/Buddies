@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
@@ -14,11 +15,12 @@ import { db } from "../../../firebaseConfig";
 import { query, where, getDocs, collection } from "firebase/firestore";
 import UserContext from "../../../context/UserContext";
 
+const { width, height } = Dimensions.get("window");
+
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
@@ -31,9 +33,7 @@ export const LoginScreen = () => {
     const q = query(collection(db, "users"), where("username", "==", username));
     try {
       const snapshot = await getDocs(q);
-      console.log(snapshot);
       snapshot.forEach((doc) => {
-        console.log(doc.id, "=>", doc.data());
         const userdata = doc.data();
         if (userdata.username) {
           setIsLoggingIn(true);
@@ -47,27 +47,18 @@ export const LoginScreen = () => {
   };
 
   const handleSignup = () => {
-    navigate(StackScreens.SignupScreen); // will navigate to SignupScreen after sign up as well
+    navigate(StackScreens.SignupScreen);
   };
 
   return (
     <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
       <View style={styles.container}>
         <ImageBackground
-          resizeMode="stretch"
+          resizeMode="cover"
           source={require("../../../assets/planttwo.png")}
-          style={[
-            styles.background,
-            { backgroundColor: "rgba(255, 255, 255, 0.5)" },
-          ]}
+          style={styles.background}
         >
-          <Text
-            style={[
-              styles.buddiesText,
-              { fontFamily: "GT-Eesti-Display-Medium-Trial" },
-              { fontSize: 36 },
-            ]}
-          >
+          <Text style={styles.buddiesText}>
             Welcome back to your{" "}
             <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
           </Text>
@@ -97,53 +88,34 @@ export const LoginScreen = () => {
                 <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
               </Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "red", marginTop: 40 }]}
-              onPress={() => navigate(StackScreens.UserProfileScreen)}
-            >
-              <Text style={styles.buttonText}>
-                Go to User Page(all screens are there)
-              </Text>
-            </TouchableOpacity>
           </View>
-
-          {/* <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            style={[styles.input, styles.roundedInput]}
-            maxLength={50}
-            secureTextEntry={true}
-          /> */}
         </ImageBackground>
       </View>
     </KeyboardAvoidingView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   background: {
     flex: 1,
     justifyContent: "center",
+    width: width,
   },
   inputContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingBottom: height * 0.1,
   },
   input: {
     paddingHorizontal: 20,
-    marginBottom: 15,
-    padding: 10,
+    marginBottom: 14,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: "#8fcbaf",
-    width: "80%",
+    width: width * 0.85,
     height: 50,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
@@ -153,11 +125,10 @@ const styles = StyleSheet.create({
   },
   buddiesText: {
     paddingHorizontal: 20,
-    marginTop: "75%",
-    marginBottom: 45,
-    fontSize: 24,
+    fontSize: 29,
     fontWeight: "bold",
     textAlign: "center",
+    marginVertical: height * 0.3,
   },
   button: {
     justifyContent: "center",
@@ -173,8 +144,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 17,
-    marginVertical: 30,
-    marginBottom: -20,
+    marginBottom: 40,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buttonText: {
