@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+// import { useOnDayChange } from 'react-native-midnight'
 import { Feather } from "@expo/vector-icons";
 import {
   View,
@@ -33,6 +34,23 @@ export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [plants, setPlants] = useState([]);
+  // const todaysDate = new Date();
+  const [todaysDate, setTodaysDate] = useState("");
+  // const [daysPassed, setDaysPassed] = useState
+
+  // useOnDayChange(() => {
+  //   // handleStreakCounter(date)
+  //   //need to think of how to access the date_added in a different way as item isnt avail here
+  //   setTodaysDate(new Date())
+  // })
+  useEffect(() => {
+    setTodaysDate(new Date());
+  }, []);
+
+  //useEffect for handleStreak Counter that will update the useState for daysPassed or Streak?
+  // useEffect(()=>{
+
+  // }}
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -44,8 +62,10 @@ export const UserProfileScreen = () => {
         const snapshot = await getDocs(q);
         snapshot.forEach((user) => {
           const userdata = user.data();
-          if (userdata.username) {
-            setPlants(userdata.plants);
+          if (userdata.plants) {
+            if (userdata.username) {
+              setPlants(userdata.plants);
+            }
           }
         });
       } catch (error) {
@@ -71,9 +91,6 @@ export const UserProfileScreen = () => {
               plants: arrayRemove(item),
             });
 
-            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
-            await deleteObject(photoRef);
-
             const updatedPlants = userdata.plants.filter(
               (plant) => plant.id !== item.id
             );
@@ -84,6 +101,9 @@ export const UserProfileScreen = () => {
             }));
 
             setPlants(updatedPlants);
+
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
+            await deleteObject(photoRef);
           } catch (error) {
             console.log(error);
           }
@@ -94,12 +114,25 @@ export const UserProfileScreen = () => {
     }
   };
 
-  const handleStreakCounter = (date) => {
+  const handleStreakCounter = (date, today) => {
     const convertedDateTaken = new Date(date);
-    const todaysDate = new Date();
-    const timePassed = todaysDate.getTime() - convertedDateTaken.getTime();
+    // const todaysDate = new Date();
+    const timePassed = today.getTime() - convertedDateTaken.getTime();
     const daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
     return daysPassed;
+  };
+
+
+  const handleWateringLabel = (wateringFrequency) => {
+    let wateringPeriod = 0;
+    if (wateringFrequency === "Frequent") {
+      wateringPeriod = 3;
+    } else if (wateringFrequency === "Average") {
+      wateringPeriod = 7;
+    } else if (wateringFrequency === "Minimum") {
+      wateringPeriod = 10;
+    }
+    return wateringPeriod;
   };
 
   const renderUserPlant = ({ item }) => {
@@ -123,13 +156,16 @@ export const UserProfileScreen = () => {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.plantName}>{capitalizedPlantName}</Text>
+          <Text>☀️Prefers {item.sunlight[0]}</Text>
+          <Text>💧Water every {handleWateringLabel(item.watering)} days</Text>
           <View style={styles.daysIconContainer}>
             <Text style={styles.daysText}>
-              {handleStreakCounter(item.date_added)} days
+              {handleStreakCounter(item.date_added, todaysDate)} days
             </Text>
           </View>
         </View>
         <View style={styles.trashIconContainer}>
+
           <TouchableOpacity onPress={() => handleDelete(item)}>
             <Feather name="trash-2" size={24} color="#1a6a45" />
           </TouchableOpacity>
@@ -151,12 +187,32 @@ export const UserProfileScreen = () => {
               <FlatList
                 data={plants}
                 renderItem={renderUserPlant}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => item.id + index}
               />
             </SafeAreaView>
           ) : (
             <Text>No plants added yet</Text>
           )}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => navigate(StackScreens.HomeScreen)}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to Home page</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate(StackScreens.PlantProfileScreen)}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to plant profile page</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate(StackScreens.IdentifiedScreen)}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Go to Identified page</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ImageBackground>
