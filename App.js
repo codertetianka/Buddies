@@ -113,7 +113,19 @@ const AppStack = () => (
     <Stack.Screen
       name={StackScreens.Login}
       component={LoginScreen}
-      options={{ title: "Login", headerShown: false }}
+      options={{
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: false,
+      }}
     />
     <Stack.Screen
       name={StackScreens.SignupScreen}

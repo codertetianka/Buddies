@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import {
   doc,
@@ -26,6 +27,8 @@ import { StackScreens } from "../../../App.screens";
 import { Feather } from "@expo/vector-icons";
 import { db, storage } from "../../../firebaseConfig";
 import { plantListExample } from "../../../plant_id_output";
+
+const { width, height } = Dimensions.get("window");
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
@@ -126,16 +129,17 @@ export const IdentifiedScreen = ({ route }) => {
       style={styles.background}
     >
       <View style={styles.overlay}>
+        <SearchCameraBar />
+        <Text>Not your plant? Try searching again</Text>
         <View style={styles.container}>
-          <Text style={styles.text}>Top results</Text>
           <View style={styles.lightGreenContainer}>
             <View style={styles.photoContainer}>
               <Image source={{ uri: savedImageUrl }} style={styles.photo} />
               <Text style={styles.dateText}>Date Taken: {dateTaken}</Text>
             </View>
           </View>
-          <Text>Not your plant? Try searching again</Text>
-          <Text>Suggested Plants:</Text>
+
+          <Text style={styles.text}>Top results</Text>
           <ScrollView style={styles.scrollView}>
             {suggestions.map((suggestion) => {
               return (
@@ -211,17 +215,17 @@ const styles = StyleSheet.create({
     color: "#1A6A45",
   },
   lightGreenContainer: {
-    /* Added */ backgroundColor: "#def2e6",
+    backgroundColor: "#def2e6",
     borderRadius: 8,
     padding: 15,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   photoContainer: {
     alignItems: "center",
   },
   photo: {
-    width: 250,
-    height: 280,
+    width: 200,
+    height: 220,
     resizeMode: "cover",
     borderRadius: 8,
   },
@@ -236,19 +240,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   suggestionContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
     alignItems: "center",
   },
   suggestionImage: {
-    width: 100,
-    height: 100,
+    width: width / 2.5,
+    height: (height / 5) * 1,
     borderRadius: 8,
     marginBottom: 5,
-  },
-  suggestionText: {
-    textAlign: "center",
-    color: "#1A6A45",
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
   },
   addText: {
     color: "#1A6A45",
