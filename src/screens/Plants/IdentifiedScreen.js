@@ -8,11 +8,24 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayUnion,
+} from "firebase/firestore";
 import SearchCameraBar from "../Components/SearchCameraBar";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import UserContext from "../../../context/UserContext";
 import { StackScreens } from "../../../App.screens";
 import { Feather } from "@expo/vector-icons";
+import { db, storage } from "../../../firebaseConfig";
+import { plantListExample } from "../../../plant_id_output";
 
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
