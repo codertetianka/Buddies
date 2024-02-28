@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+// import { useOnDayChange } from 'react-native-midnight'
 import { Feather } from "@expo/vector-icons";
 import {
   View,
@@ -33,6 +34,23 @@ export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [plants, setPlants] = useState([]);
+  // const todaysDate = new Date();
+  const [todaysDate, setTodaysDate] = useState("");
+  // const [daysPassed, setDaysPassed] = useState
+
+  // useOnDayChange(() => {
+  //   // handleStreakCounter(date)
+  //   //need to think of how to access the date_added in a different way as item isnt avail here
+  //   setTodaysDate(new Date())
+  // })
+  useEffect(() => {
+    setTodaysDate(new Date());
+  }, []);
+
+  //useEffect for handleStreak Counter that will update the useState for daysPassed or Streak?
+  // useEffect(()=>{
+
+  // })
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -94,13 +112,26 @@ export const UserProfileScreen = () => {
     }
   };
 
-  const handleStreakCounter = (date) => {
+  const handleStreakCounter = (date, today) => {
     const convertedDateTaken = new Date(date);
-    const todaysDate = new Date();
-    const timePassed = todaysDate.getTime() - convertedDateTaken.getTime();
+    // const todaysDate = new Date();
+    const timePassed = today.getTime() - convertedDateTaken.getTime();
     const daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
     return daysPassed;
   };
+
+  const handleWateringLabel = (wateringFrequency) => {
+    let wateringPeriod = 0;
+    if (wateringFrequency === "Frequent") {
+      wateringPeriod = 3;
+    } else if (wateringFrequency === "Average") {
+      wateringPeriod = 7;
+    } else if (wateringFrequency === "Occassional") {
+      wateringPeriod = 10;
+    }
+    return wateringPeriod;
+  };
+
   const renderUserPlant = ({ item }) => {
     const capitalizedPlantName =
       item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
@@ -122,12 +153,19 @@ export const UserProfileScreen = () => {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.plantName}>{capitalizedPlantName}</Text>
-<View>
-          <Text>
-            You've kept your {item.common_name} alive for{" "}
-            {handleStreakCounter(item.date_added)} days!
-          </Text>
-        </View>
+          <Text>☀️Prefers {item.sunlight[0]}</Text>
+          <Text>💧Water every {handleWateringLabel(item.watering)} days</Text>
+          <View>
+            <Text>
+              You've kept your {item.common_name} alive for{" "}
+              {
+                handleStreakCounter(item.date_added, todaysDate)
+                //  && NativeModules.Midnight.triggerDayChangedEvent(item.date_added, todaysDate)
+                // handleStreakCounter(item.date_added)
+              }{" "}
+              days!
+            </Text>
+          </View>
           <TouchableOpacity onPress={() => handleDelete(item)}>
             <Text style={styles.removeButton}>Remove</Text>
           </TouchableOpacity>
@@ -174,7 +212,7 @@ export const UserProfileScreen = () => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to Identified page</Text>
-          </TouchableOpacity>*/}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
