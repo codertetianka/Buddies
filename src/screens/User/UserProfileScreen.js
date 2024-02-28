@@ -126,7 +126,7 @@ export const UserProfileScreen = () => {
       wateringPeriod = 3;
     } else if (wateringFrequency === "Average") {
       wateringPeriod = 7;
-    } else if (wateringFrequency === "Occassional") {
+    } else if (wateringFrequency === "Minimum") {
       wateringPeriod = 10;
     }
     return wateringPeriod;
