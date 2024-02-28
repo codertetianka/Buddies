@@ -43,7 +43,7 @@ export const UserProfileScreen = () => {
   const responseListener = useRef();
   const { navigate } = useNavigation();
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
-  const [todaysDate, setTodaysDate] = useState("");
+  const [todaysDate, setTodaysDate] = useState(new Date());
 
   const { notificationIdentifier, setNotificationIdentifier } =
     useContext(NoteIdentContext);
@@ -279,7 +279,6 @@ export const UserProfileScreen = () => {
 
   // }}
 
-
   useEffect(() => {
     const fetchPlants = async () => {
       try {
@@ -351,7 +350,6 @@ export const UserProfileScreen = () => {
     return daysPassed;
   };
 
-
   const handleWateringLabel = (wateringFrequency) => {
     let wateringPeriod = 0;
     if (wateringFrequency === "Frequent") {
@@ -364,7 +362,7 @@ export const UserProfileScreen = () => {
     return wateringPeriod;
   };
 
-  const renderUserPlant = ({ item }) => {
+  const renderUserPlants = ({ item }) => {
     const capitalizedPlantName =
       item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
 
@@ -387,6 +385,13 @@ export const UserProfileScreen = () => {
           <Text style={styles.plantName}>{capitalizedPlantName}</Text>
           <Text>☀️Prefers {item.sunlight[0]}</Text>
           <Text>💧Water every {handleWateringLabel(item.watering)} days</Text>
+          <TouchableOpacity onPress={() => handlePressNotification(item)}>
+            {item.hasNotification ? (
+              <Text>cancel notification</Text>
+            ) : (
+              <Text>create notification</Text>
+            )}
+          </TouchableOpacity>
           <View style={styles.daysIconContainer}>
             <Text style={styles.daysText}>
               {handleStreakCounter(item.date_added, todaysDate)} days
@@ -394,19 +399,10 @@ export const UserProfileScreen = () => {
           </View>
         </View>
         <View style={styles.trashIconContainer}>
-
           <TouchableOpacity onPress={() => handleDelete(item)}>
             <Feather name="trash-2" size={24} color="#1a6a45" />
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity onPress={() => handlePressNotification(item)}>
-          {item.hasNotification ? (
-            <Text>cancel notification</Text>
-          ) : (
-            <Text>create notification</Text>
-          )}
-        </TouchableOpacity>
       </View>
     );
   };
@@ -425,14 +421,13 @@ export const UserProfileScreen = () => {
                 data={loggedInUser.plants}
                 renderItem={renderUserPlants}
                 keyExtractor={(item, index) => item.id + index}
-
               />
             </SafeAreaView>
           ) : (
             <Text>No plants added yet</Text>
           )}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
+          {/* <View style={styles.buttonContainer}> */}
+          {/* <TouchableOpacity
               onPress={() => navigate(StackScreens.HomeScreen)}
               style={styles.button}
             >
@@ -449,8 +444,8 @@ export const UserProfileScreen = () => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to Identified page</Text>
-            </TouchableOpacity>
-          </View>
+            </TouchableOpacity> */}
+          {/* </View> */}
         </View>
       </View>
     </ImageBackground>
