@@ -18,13 +18,13 @@ import {
   getDocs,
   arrayUnion,
 } from "firebase/firestore";
-import SearchCameraBar from "../Components/SearchCameraBar";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "../../../firebaseConfig";
+import SearchCameraBar from "../Components/SearchCameraBar";
 import { useNavigation } from "@react-navigation/native";
 import UserContext from "../../../context/UserContext";
 import { StackScreens } from "../../../App.screens";
 import { Feather } from "@expo/vector-icons";
-import { db, storage } from "../../../firebaseConfig";
 import { plantListExample } from "../../../plant_id_output";
 
 export const IdentifiedScreen = ({ route }) => {

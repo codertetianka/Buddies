@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -30,7 +30,7 @@ import UserContext from "../../../context/UserContext";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const HomeScreen = () => {
-  const { navigate } = useNavigation();
+  // const { navigate } = useNavigation();
   const [pageNumber, setPageNumber] = useState(1);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
@@ -45,7 +45,6 @@ export const HomeScreen = () => {
   };
 
   const handlePress = async (item) => {
-    //date added property needs to be added in correct format for streak feature line 78
     try {
       const q = query(
         collection(db, "users"),
