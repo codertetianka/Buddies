@@ -26,7 +26,6 @@ import { Feather } from "@expo/vector-icons";
 import { StackScreens } from "../../../App.screens";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { plantListExample } from "../../../plant_id_output";
-
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { savedImageUrl, suggestions, dateTaken } = route.params;
@@ -41,7 +40,6 @@ export const IdentifiedScreen = ({ route }) => {
         // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
         // const plantData = await PlantListApi();
         // setPlantList(plantData);
-
         // for testing purposes, comment out when changing to using API call
         setPlantList(plantListExample);
       } catch (err) {
@@ -50,7 +48,6 @@ export const IdentifiedScreen = ({ route }) => {
     };
     fetchPlantData();
   }, []);
-
   const findMatchingPlant = async (scientificName) => {
     for (let i = 0; i < plantList.length; i++) {
       if (
@@ -63,7 +60,6 @@ export const IdentifiedScreen = ({ route }) => {
       }
     }
   };
-
   useEffect(() => {
     if (scientificName) {
       findMatchingPlant(scientificName);
@@ -143,7 +139,6 @@ export const IdentifiedScreen = ({ route }) => {
           <SearchCameraBar />
           <Text style={styles.text}>Top results</Text>
           <Text>Not your plant? Try searching again</Text>
-
           <Image
             source={{ uri: savedImageUrl }}
             style={{ width: 150, height: 150 }}
@@ -188,7 +183,6 @@ export const IdentifiedScreen = ({ route }) => {
               );
             })}
           </ScrollView>
-
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => navigate(StackScreens.Login)}
@@ -202,7 +196,6 @@ export const IdentifiedScreen = ({ route }) => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -229,13 +222,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: "#1a6a45",
+    backgroundColor: "#1A6A45",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 25,
   },
   buttonText: {
-    color: "#ffffff",
+    color: "#FFFFFF",
     fontSize: 16,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
   },

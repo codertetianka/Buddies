@@ -9,6 +9,7 @@ import {
   Image,
   FlatList,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -25,6 +26,8 @@ import { useNavigation } from "@react-navigation/native";
 import { StackScreens } from "../../../App.screens";
 import UserContext from "../../../context/UserContext";
 import { deleteObject, ref } from "firebase/storage";
+
+const { width, height } = Dimensions.get("window");
 
 export const UserProfileScreen = () => {
   const { navigate } = useNavigation();
@@ -68,15 +71,19 @@ export const UserProfileScreen = () => {
               plants: arrayRemove(item),
             });
 
-            const photoRef = ref(storage, `images/${user.id}/${item.id}`); //delete photo from storage
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
             await deleteObject(photoRef);
 
-            const plants = userdata.plants;
+            const updatedPlants = userdata.plants.filter(
+              (plant) => plant.id !== item.id
+            );
 
             setLoggedInUser((prevUser) => ({
               ...prevUser,
-              plants: plants,
+              plants: updatedPlants,
             }));
+
+            setPlants(updatedPlants);
           } catch (error) {
             console.log(error);
           }
@@ -85,7 +92,6 @@ export const UserProfileScreen = () => {
     } catch (err) {
       console.log(err);
     }
-    alert(`${item.common_name} has been deleted`);
   };
 
   const handleStreakCounter = (date) => {
@@ -95,36 +101,37 @@ export const UserProfileScreen = () => {
     const daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
     return daysPassed;
   };
+  const renderUserPlant = ({ item }) => {
+    const capitalizedPlantName =
+      item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
 
-  const renderUserPlants = ({ item }) => {
     return (
-      <View>
-        {item.original_url ? (
-          <Image
-            source={{ uri: item.original_url }}
-            style={{ height: 100, width: 100 }}
-          />
-        ) : (
-          <Image
-            source={require("../../../images/hotwater.webp")}
-            style={{ height: 100, width: 100 }}
-          />
-        )}
-        <Text>{item.common_name}</Text>
-        <View>
+      <View style={styles.plantContainer}>
+        <View style={styles.imageContainer}>
+          {item.original_url ? (
+            <Image
+              source={{ uri: item.original_url }}
+              style={styles.plantImage}
+            />
+          ) : (
+            <Image
+              source={require("../../../images/hotwater.webp")}
+              style={styles.plantImage}
+            />
+          )}
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.plantName}>{capitalizedPlantName}</Text>
+<View>
           <Text>
             You've kept your {item.common_name} alive for{" "}
             {handleStreakCounter(item.date_added)} days!
           </Text>
         </View>
-        <TouchableOpacity onPress={() => handleDelete(item)}>
-          <Feather
-            name="trash-2"
-            size={20}
-            color="black"
-            style={{ marginLeft: 1 }}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDelete(item)}>
+            <Text style={styles.removeButton}>Remove</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -139,10 +146,10 @@ export const UserProfileScreen = () => {
         <View style={styles.container}>
           <Text style={styles.text}>{loggedInUser.name} Profile Screen</Text>
           {loggedInUser.plants ? (
-            <SafeAreaView>
+            <SafeAreaView style={styles.plantsContainer}>
               <FlatList
                 data={plants}
-                renderItem={renderUserPlants}
+                renderItem={renderUserPlant}
                 keyExtractor={(item) => item.id.toString()}
               />
             </SafeAreaView>
@@ -150,12 +157,6 @@ export const UserProfileScreen = () => {
             <Text>No plants added yet</Text>
           )}
           <View style={styles.buttonContainer}>
-            {/* <TouchableOpacity
-              onPress={() => navigate(StackScreens.Login)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Back to Login</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => navigate(StackScreens.HomeScreen)}
               style={styles.button}
@@ -168,8 +169,7 @@ export const UserProfileScreen = () => {
             >
               <Text style={styles.buttonText}>Go to plant profile page</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-
+            <TouchableOpacity
               onPress={() => navigate(StackScreens.IdentifiedScreen)}
               style={styles.button}
             >
@@ -204,8 +204,44 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#000",
   },
+  plantsContainer: {
+    marginTop: 10,
+  },
+  plantContainer: {
+    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#def2e6",
+    borderRadius: 8,
+    width: width - 35,
+  },
+  imageContainer: {
+    width: width / 2.7,
+    height: (height / 6) * 1,
+  },
+  plantImage: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: "cover",
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  textContainer: {
+    marginLeft: 10,
+  },
+  plantName: {
+    fontSize: 16,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
+  },
+  removeButton: {
+    color: "red",
+    fontSize: 14,
+  },
   buttonContainer: {
     marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   button: {
     backgroundColor: "#1a6a45",
