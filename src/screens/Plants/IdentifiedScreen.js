@@ -124,7 +124,42 @@ export const IdentifiedScreen = ({ route }) => {
           <Text>Not your plant? Try searching again</Text>
           <Text>Suggested Plants:</Text>
           <ScrollView style={styles.scrollView}>
-            {/* Mapping through suggestions */}
+            {suggestions.map((suggestion) => {
+              return (
+                <View key={suggestion.id}>
+                  <Image
+                    source={{ uri: suggestion.similar_images[0].url_small }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                  <Text>
+                    Scientific Name: {suggestion.plant_details.scientific_name}
+                  </Text>
+                  {suggestion.plant_details.common_names ? (
+                    <Text>
+                      Common Name: {suggestion.plant_details.common_names[0]}
+                    </Text>
+                  ) : (
+                    <Text>
+                      Common Name: {suggestion.plant_details.scientific_name}
+                    </Text>
+                  )}
+                  <Text>Probability: {suggestion.probability}</Text>
+                  <View>
+                    <Feather
+                      name="plus-square"
+                      size={20}
+                      color="black"
+                      style={{ marginLeft: 1 }}
+                      onPress={() => {
+                        handleMatchingPlant(
+                          suggestion.plant_details.scientific_name
+                        );
+                      }}
+                    />
+                  </View>
+                </View>
+              );
+            })}
           </ScrollView>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
