@@ -1,7 +1,7 @@
 import * as FileSystem from "expo-file-system";
 
 export const getPlant = async (plantPic) => {
-  const apiKey = "PIJ8Jn9T8hx41wYCmyuR5ODwYQobg4XUGhLrzZDs231ygYQSeR";
+  const apiKey = "32gomT4VJ2J42CnVMrvbxDocpFz5dAhN6WTdOJgzKGd6qr1Gv4";
 
   try {
     const fileContent = await FileSystem.readAsStringAsync(plantPic, {

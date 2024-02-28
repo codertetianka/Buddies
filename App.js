@@ -97,13 +97,12 @@ const AppStack = () => (
       name={StackScreens.HomeScreen}
       component={HomeScreen}
       options={{
-        headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 180 }}
-              resizeMode="contain"
-              marginTop={-65}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
               border="none"
             />
           </View>
@@ -124,24 +123,57 @@ const AppStack = () => (
     <Stack.Screen
       name={StackScreens.UserProfileScreen}
       component={UserProfileScreen}
-      options={{ title: "User Profile", headerShown: false }}
+      options={{
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
+      }}
     />
     <Stack.Screen
       name={StackScreens.PlantProfileScreen}
       component={PlantProfileScreen}
-      options={{ title: "Plant Profile", headerShown: false }}
+      options={{ title: "Plant Profile", headerShown: true }}
     />
     <Stack.Screen
       name={StackScreens.IdentifiedScreen}
       component={IdentifiedScreen}
-      options={{ title: "Indetified Screen", headerShown: false }}
+      options={{
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
+      }}
     />
     <Stack.Screen
       name={StackScreens.UnidentifiedScreen}
       component={UnidentifiedScreen}
       options={{
-        title: "Unidentified Screen",
-        headerShown: false,
+        header: () => (
+          <View style={{ backgroundColor: "white" }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
       }}
     />
     <Stack.Screen
@@ -152,7 +184,20 @@ const AppStack = () => (
     <Stack.Screen
       name={StackScreens.SearchResultsPage}
       component={SearchResultsPage}
-      options={{ title: "Search Results", headerShown: false }}
+      options={{
+        headerTitle: () => (
+          <View style={{ marginBottom: 120 }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 180 }}
+              resizeMode="contain"
+              marginTop={-65}
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
+      }}
     />
   </Stack.Navigator>
 );
@@ -201,8 +246,6 @@ export default function App() {
   useEffect(() => {
     requestPermission();
   }, []);
-
-  // console.log("[App]", { fontsLoaded, fontError });
 
   if (!appIsReady) {
     return null;
@@ -271,6 +314,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  logoImage: {
+    width: "50%",
+    height: 50,
+    resizeMode: "contain",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },

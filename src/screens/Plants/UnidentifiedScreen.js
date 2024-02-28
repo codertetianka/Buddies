@@ -20,29 +20,24 @@ export const UnidentifiedScreen = () => {
       source={require("../../../images/bg4.jpg")}
       style={styles.background}
     >
-      <View style={styles.container}>
+      <View style={styles.overlay}>
         <SearchCameraBar />
-        <Image
-          style={styles.img}
-          resizeMode="contain"
-          source={require("../../../images/sad.png")}
-        />
-        <View style={styles.overlay}>
-          <Text style={styles.text}>
-            Ugh oh, we couldn't identify your plant!
-          </Text>
-          <Text style={styles.textBottom}>
-            Try searching for your plant or taking another photo!
-          </Text>
 
-          {/* <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                onPress={() => navigate(StackScreens.Login)}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Back to Login</Text>
-              </TouchableOpacity>
-            </View> */}
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <Image
+              style={styles.img}
+              resizeMode="contain"
+              source={require("../../../images/sad.png")}
+            />
+
+            <Text style={styles.text}>
+              Ugh oh, we couldn't identify your plant!
+            </Text>
+            <Text style={styles.textBottom}>
+              Try searching for your plant or taking another photo!
+            </Text>
+          </View>
         </View>
       </View>
     </ImageBackground>
@@ -65,45 +60,33 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+  },
+  content: {
+    alignItems: "center",
+    marginBottom: "75%",
   },
   text: {
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
-    marginTop: -330,
+    marginTop: 15,
     padding: 7,
-    marginBottom: 120,
-    marginLeft: 25,
+    marginBottom: 10,
     color: "#000",
-    alignItems: "center",
-    backgroundColor: "white",
+    textAlign: "center",
   },
   textBottom: {
-    fontSize: 24,
-    marginTop: -100,
+    fontSize: 20,
+    marginTop: 15,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
-    margin: 25,
     color: "#1a6a45",
-    alignItems: "center",
     backgroundColor: "#def2e6",
     padding: 7,
+    textAlign: "center",
   },
-  // buttonContainer: {
-  //   marginTop: 20,
-  // },
-  // button: {
-  //   backgroundColor: "#1a6a45",
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 24,
-  //   borderRadius: 25,
-  // },
-  // buttonText: {
-  //   color: "#ffffff",
-  //   fontSize: 16,
-  //   fontFamily: "GT-Eesti-Display-Bold-Trial",
-  // },
   img: {
-    marginTop: 20,
+    marginTop: 10,
     width: 190,
-    height: 230,
+    height: 190,
   },
 });
