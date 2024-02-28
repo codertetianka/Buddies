@@ -44,8 +44,10 @@ export const UserProfileScreen = () => {
         const snapshot = await getDocs(q);
         snapshot.forEach((user) => {
           const userdata = user.data();
-          if (userdata.username) {
-            setPlants(userdata.plants);
+          if (userdata.plants) {
+            if (userdata.username) {
+              setPlants(userdata.plants);
+            }
           }
         });
       } catch (error) {
@@ -122,12 +124,12 @@ export const UserProfileScreen = () => {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.plantName}>{capitalizedPlantName}</Text>
-<View>
-          <Text>
-            You've kept your {item.common_name} alive for{" "}
-            {handleStreakCounter(item.date_added)} days!
-          </Text>
-        </View>
+          <View>
+            <Text>
+              You've kept your {item.common_name} alive for{" "}
+              {handleStreakCounter(item.date_added)} days!
+            </Text>
+          </View>
           <TouchableOpacity onPress={() => handleDelete(item)}>
             <Text style={styles.removeButton}>Remove</Text>
           </TouchableOpacity>
@@ -150,7 +152,7 @@ export const UserProfileScreen = () => {
               <FlatList
                 data={plants}
                 renderItem={renderUserPlant}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => item.id + index}
               />
             </SafeAreaView>
           ) : (
@@ -174,7 +176,7 @@ export const UserProfileScreen = () => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Go to Identified page</Text>
-          </TouchableOpacity>*/}
+            </TouchableOpacity>
           </View>
         </View>
       </View>

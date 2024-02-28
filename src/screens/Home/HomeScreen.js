@@ -46,7 +46,6 @@ export const HomeScreen = () => {
 
   const handlePress = async (item) => {
     //date added property needs to be added in correct format for streak feature line 78
-    console.log(item, "<--items");
     try {
       const q = query(
         collection(db, "users"),
