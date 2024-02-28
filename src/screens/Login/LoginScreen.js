@@ -58,36 +58,46 @@ export const LoginScreen = () => {
           source={require("../../../assets/planttwo.png")}
           style={styles.background}
         >
-          <Text style={styles.buddiesText}>
-            Welcome back to your{" "}
-            <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
-          </Text>
+          <View
+            style={{
+              // backgroundColor: "red",
+              position: "absolute",
+              top: "40%",
+              height: "60%",
+              width: "100%",
+            }}
+          >
+            <Text style={styles.buddiesText}>
+              Welcome back to your{" "}
+              <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
+            </Text>
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Username"
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-              style={[styles.input, styles.roundedInput]}
-              maxLength={50}
-            />
+            <View style={styles.inputContainer}>
+              <TextInput
+                placeholder="Username"
+                value={username}
+                onChangeText={(text) => setUsername(text)}
+                style={[styles.input, styles.roundedInput]}
+                maxLength={50}
+              />
 
-            <TouchableOpacity
-              style={[styles.button, styles.loginButton]}
-              onPress={handleLogin}
-              disabled={isLoggingIn}
-            >
-              <Text style={styles.buttonText}>
-                {isLoggingIn ? "Logging in..." : "Log In"}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.loginButton]}
+                onPress={handleLogin}
+                disabled={isLoggingIn}
+              >
+                <Text style={styles.buttonText}>
+                  {isLoggingIn ? "Logging in..." : "Log In"}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleSignup}>
-              <Text style={styles.signupText}>
-                <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
-                <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={handleSignup}>
+                <Text style={styles.signupText}>
+                  <Text style={{ color: "#000" }}>Don't have an account?</Text>{" "}
+                  <Text style={{ color: "#1a6a45" }}>Sign Up here</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -97,17 +107,20 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
   },
   background: {
     flex: 1,
-    justifyContent: "center",
+    position: "relative",
     width: width,
+    height: "100%",
   },
   inputContainer: {
     flex: 1,
+    // backgroundColor: "red",
     alignItems: "center",
-    justifyContent: "flex-end",
-    paddingBottom: height * 0.1,
+    justifyContent: "center",
+    paddingBottom: "14%",
   },
   input: {
     paddingHorizontal: 20,
@@ -125,10 +138,9 @@ const styles = StyleSheet.create({
   },
   buddiesText: {
     paddingHorizontal: 20,
-    fontSize: 29,
+    fontSize: 33,
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: height * 0.3,
   },
   button: {
     justifyContent: "center",
@@ -144,7 +156,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 17,
-    marginBottom: 40,
+    marginTop: 40,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   buttonText: {

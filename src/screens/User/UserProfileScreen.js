@@ -426,26 +426,6 @@ export const UserProfileScreen = () => {
           ) : (
             <Text>No plants added yet</Text>
           )}
-          {/* <View style={styles.buttonContainer}> */}
-          {/* <TouchableOpacity
-              onPress={() => navigate(StackScreens.HomeScreen)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to Home page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate(StackScreens.PlantProfileScreen)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to plant profile page</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate(StackScreens.IdentifiedScreen)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to Identified page</Text>
-            </TouchableOpacity> */}
-          {/* </View> */}
         </View>
       </View>
     </ImageBackground>
