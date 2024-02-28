@@ -19,6 +19,7 @@ import { IdentifiedScreen } from "./src/screens/Plants/IdentifiedScreen";
 import { UnidentifiedScreen } from "./src/screens/Plants/UnidentifiedScreen";
 import { HomeScreen } from "./src/screens/Home/HomeScreen";
 import UserContext from "./context/UserContext";
+import NoteIdentContext from "./context/NoteIdentContext";
 import "react-native-gesture-handler";
 import { CameraComponent } from "./src/screens/Components/CameraComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -240,6 +241,7 @@ export default function App() {
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [notificationIdentifier, setNotificationIdentifier] = useState({});
 
   useEffect(() => {
     requestPermission();
@@ -258,36 +260,43 @@ export default function App() {
 
   return (
     <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
-      <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
-        <NavigationContainer>
-          {loggedInUser ? (
-            <Drawer.Navigator
-              initialRouteName={DrawerScreens.AppStack}
-              drawerContent={(props) => (
-                <CustomDrawerContent
-                  loggedInUser={loggedInUser}
-                  setLoggedInUser={setLoggedInUser}
-                  {...props}
+      <NoteIdentContext.Provider
+        value={{ notificationIdentifier, setNotificationIdentifier }}
+      >
+        <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+          <NavigationContainer>
+            {loggedInUser ? (
+              <Drawer.Navigator
+                initialRouteName={DrawerScreens.AppStack}
+                drawerContent={(props) => (
+                  <CustomDrawerContent
+                    loggedInUser={loggedInUser}
+                    setLoggedInUser={setLoggedInUser}
+                    {...props}
+                  />
+                )}
+              >
+                <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
+              </Drawer.Navigator>
+            ) : (
+              <Stack.Navigator initialRouteName={StackScreens.Login}>
+                <Stack.Screen
+                  name={StackScreens.Login}
+                  component={LoginScreen}
                 />
-              )}
-            >
-              <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
-            </Drawer.Navigator>
-          ) : (
-            <Stack.Navigator initialRouteName={StackScreens.Login}>
-              <Stack.Screen name={StackScreens.Login} component={LoginScreen} />
-              <Stack.Screen
-                name={StackScreens.SignupScreen}
-                component={SignupScreen}
-              />
-              <Stack.Screen
-                name={StackScreens.UserProfileScreen}
-                component={UserProfileScreen}
-              />
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      </SafeAreaView>
+                <Stack.Screen
+                  name={StackScreens.SignupScreen}
+                  component={SignupScreen}
+                />
+                <Stack.Screen
+                  name={StackScreens.UserProfileScreen}
+                  component={UserProfileScreen}
+                />
+              </Stack.Navigator>
+            )}
+          </NavigationContainer>
+        </SafeAreaView>
+      </NoteIdentContext.Provider>
     </UserContext.Provider>
   );
 }

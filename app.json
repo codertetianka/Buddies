@@ -22,57 +22,63 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png" 
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
         "expo-font",
-      {
-        "fonts": [
-        "./assets/GT-Eesti/GT-Eesti-Display-Bold-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Bold-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Light-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Light-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Medium-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Medium-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Regular-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Regular-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-Thin-Italic-Trial.otf"  ,
-        "./assets/GT-Eesti/GT-Eesti-Display-Thin-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Bold-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Bold-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Book-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Book-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Light-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Light-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Medium-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Medium-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Regular-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Regular-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Thin-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-Thin-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-ULight-Italic-Trial.otf",
-        "./assets/GT-Eesti/GT-Eesti-Text-UltraLight-Trial.otf"
-      ]
-    }
-   
+        {
+          "fonts": [
+            "./assets/GT-Eesti/GT-Eesti-Display-Bold-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Bold-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Light-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Light-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Medium-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Medium-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Regular-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Regular-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Thin-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-Thin-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-UltraBold-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Display-UltraLight-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Bold-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Bold-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Book-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Book-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Light-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Light-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Medium-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Medium-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Regular-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Regular-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Thin-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-Thin-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-ULight-Italic-Trial.otf",
+            "./assets/GT-Eesti/GT-Eesti-Text-UltraLight-Trial.otf"
+          ]
+        }
       ],
       [
         "expo-camera",
-      {
-        "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-      }
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
       ]
-      
-      
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e397f990-5892-44b7-8a51-e657bbb56bca"
+      }
+    },
+    "owner": "humayra"
   }
-  
 }

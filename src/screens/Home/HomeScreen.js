@@ -45,7 +45,6 @@ export const HomeScreen = () => {
   };
 
   const handlePress = async (item) => {
-    //date added property needs to be added in correct format for streak feature line 78
     try {
       const q = query(
         collection(db, "users"),
@@ -74,10 +73,14 @@ export const HomeScreen = () => {
               }
             }
             plantData.original_url = downloadUrl;
+
+            plantData.hasNotification = false;
+
             plantData.date_added = new Date()
               .toISOString()
               .toString()
               .slice(0, 10);
+
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
