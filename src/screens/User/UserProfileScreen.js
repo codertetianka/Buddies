@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { Feather } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -87,6 +88,14 @@ export const UserProfileScreen = () => {
     alert(`${item.common_name} has been deleted`);
   };
 
+  const handleStreakCounter = (date) => {
+    const convertedDateTaken = new Date(date);
+    const todaysDate = new Date();
+    const timePassed = todaysDate.getTime() - convertedDateTaken.getTime();
+    const daysPassed = Math.floor(timePassed / (1000 * 3600 * 24));
+    return daysPassed;
+  };
+
   const renderUserPlants = ({ item }) => {
     return (
       <View>
@@ -102,8 +111,19 @@ export const UserProfileScreen = () => {
           />
         )}
         <Text>{item.common_name}</Text>
+        <View>
+          <Text>
+            You've kept your {item.common_name} alive for{" "}
+            {handleStreakCounter(item.date_added)} days!
+          </Text>
+        </View>
         <TouchableOpacity onPress={() => handleDelete(item)}>
-          <Text>remove</Text>
+          <Feather
+            name="trash-2"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+          />
         </TouchableOpacity>
       </View>
     );

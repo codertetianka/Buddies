@@ -75,23 +75,6 @@ export const IdentifiedScreen = ({ route }) => {
   };
 
   const handleAddPlant = async (newPlant, photoDate, newPhoto) => {
-    //does foundPlant obj look different to item? no
-    //query the database user collection where the usernamne matches the loggedInUser (imported userContext)
-    //await getDocs to obtain the user info/data
-    //condition to check if there is a username in the returned userdata
-    //try block to
-    /*
-    -upload the photo taken to firebase storage
-    -download the picture?? what for
-    -creating an object for plantData
-    -iterating through keys within the foundPlant and copying them to new plantData object, ignoring copying of an existing image
-    -creating a new property in new plantData obj called original_url which is eqiuiv to img downloaded from firebase
-    - defining a variable to reference the user to attach plant info as an array to plants key in firebase user collection
-    - alert the user to say plant added to profile
-    - updating user state to amend their plant data to include the new plant data.
-    - catch block for errors ? user not found or logged in?
-    */
-    console.log(newPlant, "<--newPlant");
     try {
       const q = query(
         collection(db, "users"),
@@ -144,17 +127,10 @@ export const IdentifiedScreen = ({ route }) => {
 
   useEffect(() => {
     if (foundPlant) {
-      console.log(foundPlant, "<< foundPlant in handleAddPlant");
-
-      //add foundPlant to firebase by invoking a function to handle add plant
-      //then navigate, then call from firebase to render in userProfile (handled in the next page)
       handleAddPlant(foundPlant, dateTaken, savedImageUrl);
       navigate(StackScreens.UserProfileScreen);
     }
   }, [foundPlant, navigate]);
-
-  // create object with imageUrl, date taken, watering and sun info
-  // send selected plant info object to firebase database (map in firebase equv to obj)
 
   return (
     <ImageBackground
@@ -176,7 +152,6 @@ export const IdentifiedScreen = ({ route }) => {
           <Text>Suggested Plants:</Text>
           <ScrollView style={styles.scrollView}>
             {suggestions.map((suggestion) => {
-              console.log(suggestion, "<<<suggestion");
               return (
                 <View key={suggestion.id}>
                   <Image
@@ -206,7 +181,7 @@ export const IdentifiedScreen = ({ route }) => {
                         handleMatchingPlant(
                           suggestion.plant_details.scientific_name
                         );
-                      }} // change to handle adding to profile
+                      }}
                     />
                   </View>
                 </View>

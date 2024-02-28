@@ -75,6 +75,10 @@ export const HomeScreen = () => {
               }
             }
             plantData.original_url = downloadUrl;
+            plantData.date_added = new Date()
+              .toISOString()
+              .toString()
+              .slice(0, 10);
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
