@@ -73,9 +73,6 @@ export const UserProfileScreen = () => {
               plants: arrayRemove(item),
             });
 
-            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
-            await deleteObject(photoRef);
-
             const updatedPlants = userdata.plants.filter(
               (plant) => plant.id !== item.id
             );
@@ -86,6 +83,9 @@ export const UserProfileScreen = () => {
             }));
 
             setPlants(updatedPlants);
+
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
+            await deleteObject(photoRef);
           } catch (error) {
             console.log(error);
           }
