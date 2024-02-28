@@ -45,7 +45,7 @@ export const HomeScreen = () => {
   };
 
   const handlePress = async (item) => {
-    console.log(item, "<--items");
+    // console.log(item, "<--items");
     try {
       const q = query(
         collection(db, "users"),
@@ -74,6 +74,8 @@ export const HomeScreen = () => {
               }
             }
             plantData.original_url = downloadUrl;
+            // plantData.notificationStatus = "";
+            plantData.hasNotification = false;
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
