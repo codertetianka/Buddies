@@ -25,14 +25,16 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 // import { StackScreens } from "../../../App.screens";
-import { data } from "./../../../data";
+import { data } from "./../../../data"; // hard coded test data to limit api calls
 import UserContext from "../../../context/UserContext";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
 
 export const HomeScreen = () => {
   // const { navigate } = useNavigation();
   const [pageNumber, setPageNumber] = useState(1);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const [plantList, setPlantList] = useState([]);
 
   useEffect(() => {
     loadPlantData();
@@ -43,6 +45,23 @@ export const HomeScreen = () => {
       setPageNumber(pageNumber + 1);
     }, 1000);
   };
+
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      try {
+        // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
+        const plantData = await PlantListApi();
+        setPlantList(plantData);
+        // for testing purposes, comment out when changing to using API call
+        // setPlantList(plantListExample);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPlantData();
+  }, []);
+
+  // console.log(plantList.length); // will only log first 30 outputs
 
   const handlePress = async (item) => {
     try {
@@ -80,7 +99,6 @@ export const HomeScreen = () => {
               .toISOString()
               .toString()
               .slice(0, 10);
-
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
@@ -202,7 +220,7 @@ export const HomeScreen = () => {
           }}
         >
           <FlatList
-            data={data}
+            data={plantList}
             renderItem={(props) =>
               renderRowItem({
                 ...props,
