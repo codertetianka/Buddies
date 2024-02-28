@@ -122,6 +122,7 @@ export const UserProfileScreen = () => {
     return daysPassed;
   };
 
+
   const handleWateringLabel = (wateringFrequency) => {
     let wateringPeriod = 0;
     if (wateringFrequency === "Frequent") {
@@ -139,7 +140,7 @@ export const UserProfileScreen = () => {
       item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
 
     return (
-      <View style={styles.plantContainer}>
+      <View style={[styles.plantContainer, { width: width - 35 }]}>
         <View style={styles.imageContainer}>
           {item.original_url ? (
             <Image
@@ -157,20 +158,16 @@ export const UserProfileScreen = () => {
           <Text style={styles.plantName}>{capitalizedPlantName}</Text>
           <Text>☀️Prefers {item.sunlight[0]}</Text>
           <Text>💧Water every {handleWateringLabel(item.watering)} days</Text>
-          <View>
-            <Text>
-              You've kept your {item.common_name} alive for{" "}
-              {
-                handleStreakCounter(item.date_added, todaysDate)
-                //  && NativeModules.Midnight.triggerDayChangedEvent(item.date_added, todaysDate)
-                // handleStreakCounter(item.date_added)
-              }{" "}
-              days!
-
+          <View style={styles.daysIconContainer}>
+            <Text style={styles.daysText}>
+              {handleStreakCounter(item.date_added, todaysDate)} days
             </Text>
           </View>
+        </View>
+        <View style={styles.trashIconContainer}>
+
           <TouchableOpacity onPress={() => handleDelete(item)}>
-            <Text style={styles.removeButton}>Remove</Text>
+            <Feather name="trash-2" size={24} color="#1a6a45" />
           </TouchableOpacity>
         </View>
       </View>
@@ -185,7 +182,6 @@ export const UserProfileScreen = () => {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.text}>{loggedInUser.name} Profile Screen</Text>
           {loggedInUser.plants ? (
             <SafeAreaView style={styles.plantsContainer}>
               <FlatList
@@ -237,16 +233,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   container: {
+    flex: 1,
     alignItems: "center",
-  },
-  text: {
-    fontSize: 24,
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
-    marginBottom: 20,
-    color: "#000",
+    paddingHorizontal: 20, // Added paddingHorizontal for better spacing
   },
   plantsContainer: {
-    marginTop: 10,
+    flex: 1,
+    width: "100%",
   },
   plantContainer: {
     marginBottom: 20,
@@ -254,7 +247,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#def2e6",
     borderRadius: 8,
-    width: width - 35,
   },
   imageContainer: {
     width: width / 2.7,
@@ -269,30 +261,26 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   textContainer: {
-    marginLeft: 10,
+    flex: 1,
+    marginLeft: 13,
+    justifyContent: "center",
   },
   plantName: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
+    color: "black",
   },
-  removeButton: {
-    color: "red",
-    fontSize: 14,
+  trashIconContainer: {
+    marginTop: 80,
+    padding: 17,
   },
-  buttonContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-around",
+  daysIconContainer: {
+    marginBottom: 65,
+    marginTop: 15,
   },
-  button: {
-    backgroundColor: "#1a6a45",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 25,
-  },
-  buttonText: {
-    color: "#ffffff",
-    fontSize: 16,
+  daysText: {
+    color: "#3bb162",
     fontFamily: "GT-Eesti-Display-Bold-Trial",
+    fontSize: 14,
   },
 });
