@@ -62,8 +62,10 @@ export const UserProfileScreen = () => {
         const snapshot = await getDocs(q);
         snapshot.forEach((user) => {
           const userdata = user.data();
-          if (userdata.username) {
-            setPlants(userdata.plants);
+          if (userdata.plants) {
+            if (userdata.username) {
+              setPlants(userdata.plants);
+            }
           }
         });
       } catch (error) {
@@ -89,9 +91,6 @@ export const UserProfileScreen = () => {
               plants: arrayRemove(item),
             });
 
-            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
-            await deleteObject(photoRef);
-
             const updatedPlants = userdata.plants.filter(
               (plant) => plant.id !== item.id
             );
@@ -102,6 +101,9 @@ export const UserProfileScreen = () => {
             }));
 
             setPlants(updatedPlants);
+
+            const photoRef = ref(storage, `images/${user.id}/${item.id}`);
+            await deleteObject(photoRef);
           } catch (error) {
             console.log(error);
           }
@@ -164,6 +166,7 @@ export const UserProfileScreen = () => {
                 // handleStreakCounter(item.date_added)
               }{" "}
               days!
+
             </Text>
           </View>
           <TouchableOpacity onPress={() => handleDelete(item)}>
@@ -188,7 +191,7 @@ export const UserProfileScreen = () => {
               <FlatList
                 data={plants}
                 renderItem={renderUserPlant}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => item.id + index}
               />
             </SafeAreaView>
           ) : (
