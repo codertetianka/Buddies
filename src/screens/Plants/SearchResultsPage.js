@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -8,15 +8,83 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayUnion,
+} from "firebase/firestore";
+import { db, storage } from "../../../firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import UserContext from "../../../context/UserContext";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { data } from "../../../data";
 
 const SearchResultsPage = ({ route }) => {
   const { searchPhrase } = route.params;
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const filteredData = data.filter((plant) =>
     plant.common_name.toLowerCase().includes(searchPhrase.toLowerCase())
   );
+
+  const handlePress = async (item) => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", loggedInUser.username)
+      );
+      const snapshot = await getDocs(q);
+      snapshot.forEach(async (user) => {
+        const userdata = user.data();
+
+        if (userdata.username) {
+          try {
+            const imageUrl = await fetch(item.default_image.original_url);
+            const blob = await imageUrl.blob();
+
+            const imageRef = ref(storage, `images/${user.id}/${item.id}`);
+            await uploadBytes(imageRef, blob);
+
+            const downloadUrl = await getDownloadURL(
+              ref(storage, `images/${user.id}/${item.id}`)
+            );
+
+            const plantData = {};
+            for (const key in item) {
+              if (!key.includes("image")) {
+                plantData[key] = item[key];
+              }
+            }
+            plantData.original_url = downloadUrl;
+            plantData.date_added = new Date()
+              .toISOString()
+              .toString()
+              .slice(0, 10);
+
+            const plantRef = doc(db, "users", user.id);
+            updateDoc(plantRef, {
+              plants: arrayUnion(plantData),
+            });
+
+            alert(`${item.common_name} has been added`);
+
+            setLoggedInUser((currUser) => {
+              return { ...currUser, plants: [...currUser.plants, plantData] };
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderPlantItem = ({ item }) => {
     const imageUri =
@@ -28,7 +96,10 @@ const SearchResultsPage = ({ route }) => {
         <Text style={[styles.commonName, { color: "#1a6a45" }]}>
           {item.common_name}
         </Text>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => handlePress(item)}
+        >
           <View style={styles.button}>
             <Text style={styles.buttonText}>+</Text>
           </View>
