@@ -17,20 +17,94 @@ import { Feather } from "@expo/vector-icons";
 export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { savedImageUrl, suggestions, dateTaken } = route.params;
-  const { loggedInUser } = useContext(UserContext);
-  const [foundPlant, setFoundPlant] = useState(null);
+  const [plantList, setPlantList] = useState([]);
+  const [foundPlant, setFoundPlant] = useState(null); // when a matching plant is returned from perenial API
+  const [scientificName, setScientificName] = useState(null); // set by pressing + button
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      try {
+        // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
+        // const plantData = await PlantListApi();
+        // setPlantList(plantData);
+        // for testing purposes, comment out when changing to using API call
+        setPlantList(plantListExample);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPlantData();
+  }, []);
+  const findMatchingPlant = async (scientificName) => {
+    for (let i = 0; i < plantList.length; i++) {
+      if (
+        plantList[i].scientific_name[0]
+          .toLowerCase()
+          .includes(scientificName.toLowerCase())
+      ) {
+        setFoundPlant(plantList[i]);
+        break;
+      }
+    }
+  };
+  useEffect(() => {
+    if (scientificName) {
+      findMatchingPlant(scientificName);
+    }
+  }, [scientificName]);
+  const handleMatchingPlant = (ScientificName) => {
+    setScientificName(ScientificName);
+  };
+  const handleAddPlant = async (newPlant, photoDate, newPhoto) => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", loggedInUser.username)
+      );
+      const snapshot = await getDocs(q);
+      snapshot.forEach(async (user) => {
+        const userdata = user.data();
+        if (userdata.username) {
+          try {
+            const imageUrl = await fetch(newPhoto);
+            const blob = await imageUrl.blob();
+            const imageRef = ref(storage, `images/${user.id}/${newPlant.id}`);
+            await uploadBytes(imageRef, blob);
+            const downloadUrl = await getDownloadURL(
+              ref(storage, `images/${user.id}/${newPlant.id}`)
+            );
+            const plantData = {};
+            for (const key in newPlant) {
+              if (!key.includes("image")) {
+                plantData[key] = newPlant[key];
+              }
+            }
+            plantData.original_url = downloadUrl;
+            plantData.date_added = photoDate;
+            const plantRef = doc(db, "users", user.id);
+            updateDoc(plantRef, {
+              plants: arrayUnion(plantData),
+            });
+            alert(`${newPlant.common_name} has been added`);
+            setLoggedInUser((currUser) => {
+              return { ...currUser, plants: [...currUser.plants, plantData] };
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (foundPlant) {
       handleAddPlant(foundPlant, dateTaken, savedImageUrl);
       navigate(StackScreens.UserProfileScreen);
     }
-  }, [foundPlant, dateTaken, savedImageUrl, navigate]);
-
-  const handleAddPlant = async (newPlant, photoDate, newPhoto) => {
-    // Function to handle adding the plant to user's profile
-    // This function is unchanged from your original code
-  };
+  }, [foundPlant, navigate]);
 
   return (
     <ImageBackground
