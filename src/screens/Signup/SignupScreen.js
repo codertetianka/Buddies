@@ -30,22 +30,32 @@ export const SignupScreen = () => {
 
   const handleSignup = async () => {
     try {
+      const trimmedName = name.trim();
+      const trimmedUsername = username.trim();
+
+      console.log(trimmedName);
+      console.log(trimmedUsername);
+
       const q = query(
         collection(db, "users"),
-        where("username", "==", username)
+        where("username", "==", trimmedUsername)
       );
       const snapshot = await getDocs(q);
       if (!snapshot.empty) {
-        console.log("Username already exists");
+        alert("Username already exists");
         navigate(StackScreens.Login);
         return;
       }
 
-      console.log("Creating new user:", name, username);
-      const docRef = await addDoc(collection(db, "users"), { name, username });
-      console.log("Document written with ID:", docRef.id);
-      console.log("Navigating to plant list");
-      setLoggedInUser({ id: docRef.id, name, username });
+      const docRef = await addDoc(collection(db, "users"), {
+        name: trimmedName,
+        username: trimmedUsername,
+      });
+      setLoggedInUser({
+        id: docRef.id,
+        name: trimmedName,
+        username: trimmedUsername,
+      });
     } catch (err) {
       console.log(err);
     }
