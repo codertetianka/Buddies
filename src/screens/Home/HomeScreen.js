@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -24,14 +23,12 @@ import {
   getDocs,
   arrayUnion,
 } from "firebase/firestore";
-// import { StackScreens } from "../../../App.screens";
-import { data } from "./../../../data"; // hard coded test data to limit api calls
 import UserContext from "../../../context/UserContext";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { data } from "../../../Test Data/data"; // hard coded test data to limit api calls
 import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
 
 export const HomeScreen = () => {
-  // const { navigate } = useNavigation();
   const [pageNumber, setPageNumber] = useState(1);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [plantList, setPlantList] = useState([]);
@@ -49,7 +46,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     const fetchPlantData = async () => {
       try {
-        // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
+        // Correct method for fetching data from api - comment out so don't use too many api calls
         const plantData = await PlantListApi();
         setPlantList(plantData);
         // for testing purposes, comment out when changing to using API call
@@ -60,8 +57,6 @@ export const HomeScreen = () => {
     };
     fetchPlantData();
   }, []);
-
-  // console.log(plantList.length); // will only log first 30 outputs
 
   const handlePress = async (item) => {
     try {

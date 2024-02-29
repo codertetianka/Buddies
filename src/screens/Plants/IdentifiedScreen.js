@@ -26,7 +26,8 @@ import { useNavigation } from "@react-navigation/native";
 import UserContext from "../../../context/UserContext";
 import { StackScreens } from "../../../App.screens";
 import { Feather } from "@expo/vector-icons";
-import { plantListExample } from "../../../plant_id_output";
+import { plantListExample } from "../../../Test Data/plant_id_output"; // hard coded test data to limit api calls
+import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
 
 const { width, height } = Dimensions.get("window");
 
@@ -41,11 +42,11 @@ export const IdentifiedScreen = ({ route }) => {
   useEffect(() => {
     const fetchPlantData = async () => {
       try {
-        // Correct method for fetching data from api - commented out so don't use too many api calls. Just using list in plant_id_output for testing purposes
-        // const plantData = await PlantListApi();
-        // setPlantList(plantData);
+        // Correct method for fetching data from api - comment out so don't use too many api calls
+        const plantData = await PlantListApi();
+        setPlantList(plantData);
         // for testing purposes, comment out when changing to using API call
-        setPlantList(plantListExample);
+        // setPlantList(plantListExample);
       } catch (err) {
         console.log(err);
       }
