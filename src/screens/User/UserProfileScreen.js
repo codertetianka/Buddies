@@ -332,6 +332,7 @@ export const UserProfileScreen = () => {
 
             const photoRef = ref(storage, `images/${user.id}/${item.id}`);
             await deleteObject(photoRef);
+            alert("Plant removed");
           } catch (error) {
             console.log(error);
           }
@@ -399,9 +400,9 @@ export const UserProfileScreen = () => {
             <Text style={styles.plantName}> {capitalizedPlantName}</Text>
             <TouchableOpacity onPress={() => handlePressNotification(item)}>
               {item.hasNotification ? (
-                <Feather name="bell-off" size={24} color="#e27e18" />
-              ) : (
                 <Feather name="bell" size={24} color="#e27e18" />
+              ) : (
+                <Feather name="bell-off" size={24} color="#e27e18" />
               )}
             </TouchableOpacity>
           </View>
