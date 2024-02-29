@@ -172,7 +172,7 @@ export const HomeScreen = () => {
                 .join(" ")}
             </Text>
             <TouchableOpacity
-              style={[styles.buttonPlus, {}]} // Wrap inline style object with curly braces
+              style={[styles.buttonPlus, {}]}
               onPress={() => handlePress(item)}
             >
               <View
@@ -274,7 +274,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonP: {
-    color: "white",
     fontWeight: "bold",
     color: "white",
   },

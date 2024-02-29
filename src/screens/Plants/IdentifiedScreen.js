@@ -42,11 +42,10 @@ export const IdentifiedScreen = ({ route }) => {
     const fetchPlantData = async () => {
       try {
         // Correct method for fetching data from api - comment out so don't use too many api calls
-        const plantData = await PlantListApi();
-        setPlantList(plantData);
+        // const plantData = await PlantListApi();
+        // setPlantList(plantData);
         // for testing purposes, comment out when changing to using API call
-        // setPlantList(plantListExample);
-
+        setPlantList(plantListExample);
       } catch (err) {
         console.log(err);
       }
@@ -134,7 +133,8 @@ export const IdentifiedScreen = ({ route }) => {
       style={styles.background}
     >
       <View style={styles.overlay}>
-        <SearchCameraBar />
+        {/* <View style={styles.header}></View> */}
+        <SearchCameraBar style={styles.searchBar} />
         <Text style={styles.searchAgainText}>
           Not your plant? Try searching again
         </Text>
@@ -158,7 +158,7 @@ export const IdentifiedScreen = ({ route }) => {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              style={[styles.scrollView, { marginVertical: 10 }]}
+              style={[styles.scrollView, { marginBottom: 20 }]}
               contentContainerStyle={{ paddingHorizontal: 10 }}
             >
               {suggestions.map((suggestion) => (
@@ -168,26 +168,57 @@ export const IdentifiedScreen = ({ route }) => {
                       source={{ uri: suggestion.similar_images[0].url_small }}
                       style={styles.suggestionImage}
                     />
-                    <Text>{suggestion.plant_details.scientific_name}</Text>
-                    <Text>
-                      {suggestion.plant_details.common_names
-                        ? suggestion.plant_details.common_names[0]
-                        : suggestion.plant_details.scientific_name}
-                    </Text>
-                    <Text>
-                      Probability:{" "}
-                      {`${Math.floor(suggestion.probability * 100)}%`}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleMatchingPlant(
-                          suggestion.plant_details.scientific_name
-                        )
-                      }
-                      style={styles.addButton}
-                    >
-                      <Text style={styles.addButtonText}>+</Text>
-                    </TouchableOpacity>
+                    <View style={styles.bottomLeftContainer}>
+                      <Text
+                        style={[styles.bottomLeft, styles.boldText]}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {suggestion.plant_details.scientific_name}
+                      </Text>
+                      <Text
+                        style={styles.bottomLeft}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {suggestion.plant_details.common_names
+                          ? suggestion.plant_details.common_names[0]
+                              .charAt(0)
+                              .toUpperCase() +
+                            suggestion.plant_details.common_names[0].slice(1)
+                          : suggestion.plant_details.scientific_name}
+                      </Text>
+                      <View
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          width: "100%",
+                          marginTop: -3,
+                          // backgroundColor: "red",
+                        }}
+                      >
+                        <Text
+                          style={{ flex: 1 }}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          Match:{" "}
+                          {`${Math.floor(suggestion.probability * 100)}%`}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleMatchingPlant(
+                              suggestion.plant_details.scientific_name
+                            )
+                          }
+                          style={styles.addButton}
+                        >
+                          <Text style={styles.addButtonText}>+</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                   </View>
                 </View>
               ))}
@@ -216,73 +247,101 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    // paddingTop: 20,
   },
   container: {
     alignItems: "center",
   },
   text: {
-    fontSize: 24,
+    fontSize: 23,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
-    marginBottom: 30,
+    marginBottom: 25,
+    marginTop: 15,
     color: "#1A6A45",
   },
   lightGreenContainer: {
     backgroundColor: "#def2e6",
     borderRadius: 8,
-    padding: 15,
-    marginBottom: 5,
+    flexDirection: "column",
+
+    paddingTop: 6,
+    paddingHorizontal: 6,
   },
   photoContainer: {
     alignItems: "center",
+    paddingBottom: 18,
   },
   photo: {
-    width: 180,
-    height: 200,
+    width: 170,
+    height: 180,
     resizeMode: "cover",
     borderRadius: 8,
   },
   dateText: {
-    marginTop: 5,
+    marginTop: 6,
     color: "#1F8505",
-    fontSize: 16,
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
+    fontSize: 14,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
   },
   scrollView: {
     marginBottom: 10,
   },
   suggestionContainer: {
-    flex: 1,
-    marginBottom: 15,
-    alignItems: "center",
-    marginLeft: 30,
-  },
-  searchAgainText: {
-    color: "#1A6A45",
-    marginTop: 30,
-    fontSize: 22,
-    marginBottom: 20,
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
+    marginRight: 15,
+    width: 180,
   },
   suggestionImage: {
-    height: 145,
-    width: 140,
+    width: "100%",
+    height: 150,
+    marginBottom: 10,
     borderRadius: 8,
-    marginBottom: 5,
+  },
+  bottomLeftContainer: {
+    // position: "absolute",
+    // bottom: 10,
+    // left: 10,
+    // right: 10,
+    // backgroundColor: "green",
+    display: "flex",
+    flexDirection: "column",
+  },
+  bottomLeft: {
+    // fontSize: 18,
+    // lineHeight: 24,
+    // marginBottom: 7,
+    // flex: 1,
   },
   addButton: {
-    backgroundColor: "#1A6A45",
-    borderRadius: 15,
-    width: 30,
-    height: 30,
+    // position: "absolute",
+    // bottom: 10,
+    // right: 10,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    backgroundColor: "#1a6a45",
+    borderRadius: 20,
+    width: 24,
+    height: 24,
   },
   addButtonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: "white",
+    fontSize: 20,
+  },
+  header: {
+    width: "90%",
+    height: 16,
+  },
+  searchAgainText: {
+    marginTop: 18,
+    marginBottom: 18,
+    fontSize: 19,
+    fontFamily: "GT-Eesti-Display-Medium-Trial",
+  },
+  searchBar: {
+    marginTop: 15,
+  },
+  boldText: {
     fontWeight: "bold",
+    // marginBottom: 4,
   },
 });
 
