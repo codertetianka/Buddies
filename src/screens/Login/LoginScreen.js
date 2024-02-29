@@ -35,12 +35,17 @@ export const LoginScreen = () => {
       setIsLoggingIn(true);
       const snapshot = await getDocs(q);
 
-      snapshot.forEach((doc) => {
-        const userdata = doc.data();
-        if (userdata.username) {
-          setLoggedInUser(userdata);
-        }
-      });
+      if (snapshot.empty) {
+        alert("Username not found");
+      } else {
+        snapshot.forEach((doc) => {
+          const userdata = doc.data();
+          if (userdata.username) {
+            setLoggedInUser(userdata);
+          }
+        });
+      }
+
       setUsername("");
     } catch (err) {
       console.log(err);
