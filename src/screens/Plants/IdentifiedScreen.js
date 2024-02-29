@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import {
   doc,
-  setDoc,
   updateDoc,
   collection,
   query,
@@ -35,8 +34,7 @@ export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { savedImageUrl, suggestions, dateTaken } = route.params;
   const [plantList, setPlantList] = useState([]);
-  const [foundPlant, setFoundPlant] = useState(null); // when a matching plant is returned from perenial API
-  const [scientificName, setScientificName] = useState(null); // set by pressing + button
+  const [scientificName, setScientificName] = useState(null);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -47,12 +45,14 @@ export const IdentifiedScreen = ({ route }) => {
         setPlantList(plantData);
         // for testing purposes, comment out when changing to using API call
         // setPlantList(plantListExample);
+
       } catch (err) {
         console.log(err);
       }
     };
     fetchPlantData();
   }, []);
+
   const findMatchingPlant = async (scientificName) => {
     for (let i = 0; i < plantList.length; i++) {
       if (
@@ -60,19 +60,25 @@ export const IdentifiedScreen = ({ route }) => {
           .toLowerCase()
           .includes(scientificName.toLowerCase())
       ) {
-        setFoundPlant(plantList[i]);
-        break;
+        return plantList[i];
       }
     }
+    return null;
   };
+
   useEffect(() => {
     if (scientificName) {
-      findMatchingPlant(scientificName);
+      const foundPlant = findMatchingPlant(scientificName);
+      if (foundPlant) {
+        handleAddPlant(foundPlant, dateTaken, savedImageUrl);
+      }
     }
   }, [scientificName]);
+
   const handleMatchingPlant = (ScientificName) => {
     setScientificName(ScientificName);
   };
+
   const handleAddPlant = async (newPlant, photoDate, newPhoto) => {
     try {
       const q = query(
@@ -81,47 +87,40 @@ export const IdentifiedScreen = ({ route }) => {
       );
       const snapshot = await getDocs(q);
       snapshot.forEach(async (user) => {
-        const userdata = user.data();
-        if (userdata.username) {
-          try {
-            const imageUrl = await fetch(newPhoto);
-            const blob = await imageUrl.blob();
-            const imageRef = ref(storage, `images/${user.id}/${newPlant.id}`);
-            await uploadBytes(imageRef, blob);
-            const downloadUrl = await getDownloadURL(
-              ref(storage, `images/${user.id}/${newPlant.id}`)
-            );
-            const plantData = {};
-            for (const key in newPlant) {
-              if (!key.includes("image")) {
-                plantData[key] = newPlant[key];
-              }
-            }
-            plantData.original_url = downloadUrl;
-            plantData.date_added = photoDate;
-            const plantRef = doc(db, "users", user.id);
-            updateDoc(plantRef, {
-              plants: arrayUnion(plantData),
-            });
-            alert(`${newPlant.common_name} has been added`);
-            setLoggedInUser((currUser) => {
-              return { ...currUser, plants: [...currUser.plants, plantData] };
-            });
-          } catch (error) {
-            console.log(error);
+        const imageUrl = await fetch(newPhoto);
+        const blob = await imageUrl.blob();
+        const imageRef = ref(storage, `images/${user.id}/${newPlant.id}`);
+        await uploadBytes(imageRef, blob);
+        const downloadUrl = await getDownloadURL(
+          ref(storage, `images/${user.id}/${newPlant.id}`)
+        );
+
+        const plantData = {};
+        for (const key in newPlant) {
+          if (!key.includes("image")) {
+            plantData[key] = newPlant[key];
           }
         }
+        plantData.original_url = downloadUrl;
+        plantData.date_added = photoDate;
+
+        const plantRef = doc(db, "users", user.id);
+        updateDoc(plantRef, {
+          plants: arrayUnion(plantData),
+        });
+
+        alert(`${newPlant.common_name} has been added`);
+
+        setLoggedInUser((currUser) => ({
+          ...currUser,
+          plants: [...currUser.plants, plantData],
+        }));
+        navigate(StackScreens.UserProfileScreen);
       });
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (foundPlant) {
-      handleAddPlant(foundPlant, dateTaken, savedImageUrl);
-      navigate(StackScreens.UserProfileScreen);
-    }
-  }, [foundPlant, navigate]);
 
   return (
     <ImageBackground
@@ -131,7 +130,10 @@ export const IdentifiedScreen = ({ route }) => {
     >
       <View style={styles.overlay}>
         <SearchCameraBar />
-        <Text>Not your plant? Try searching again</Text>
+        <Text style={styles.searchAgainText}>
+          Not your plant? Try searching again
+        </Text>
+
         <View style={styles.container}>
           <View style={styles.lightGreenContainer}>
             <View style={styles.photoContainer}>
@@ -141,51 +143,53 @@ export const IdentifiedScreen = ({ route }) => {
           </View>
 
           <Text style={styles.text}>Top results</Text>
-          <ScrollView style={styles.scrollView}>
-            {suggestions.map((suggestion) => {
-              return (
-                <View key={suggestion.id}>
-                  <Image
-                    source={{ uri: suggestion.similar_images[0].url_small }}
-                    style={{ width: 100, height: 100 }}
-                  />
-                  <Text>
-                    Scientific Name: {suggestion.plant_details.scientific_name}
-                  </Text>
-                  {suggestion.plant_details.common_names ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Feather
+              name="chevron-left"
+              size={24}
+              color="black"
+              style={{ marginRight: 10 }}
+            />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={[styles.scrollView, { marginVertical: 10 }]}
+              contentContainerStyle={{ paddingHorizontal: 10 }}
+            >
+              {suggestions.map((suggestion) => (
+                <View key={suggestion.id} style={styles.suggestionContainer}>
+                  <View style={styles.lightGreenContainer}>
+                    <Image
+                      source={{ uri: suggestion.similar_images[0].url_small }}
+                      style={styles.suggestionImage}
+                    />
+                    <Text>{suggestion.plant_details.scientific_name}</Text>
                     <Text>
-                      Common Name: {suggestion.plant_details.common_names[0]}
+                      {suggestion.plant_details.common_names
+                        ? suggestion.plant_details.common_names[0]
+                        : suggestion.plant_details.scientific_name}
                     </Text>
-                  ) : (
-                    <Text>
-                      Common Name: {suggestion.plant_details.scientific_name}
-                    </Text>
-                  )}
-                  <Text>Probability: {suggestion.probability}</Text>
-                  <View>
-                    <Feather
-                      name="plus-square"
-                      size={20}
-                      color="black"
-                      style={{ marginLeft: 1 }}
-                      onPress={() => {
+                    <Text>Probability: {suggestion.probability}</Text>
+                    <TouchableOpacity
+                      onPress={() =>
                         handleMatchingPlant(
                           suggestion.plant_details.scientific_name
-                        );
-                      }}
-                    />
+                        )
+                      }
+                      style={styles.addButton}
+                    >
+                      <Text style={styles.addButtonText}>+</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-              );
-            })}
-          </ScrollView>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => navigate(StackScreens.CameraComponent)}
-              style={styles.button}
-            >
-              <Feather name="camera" size={24} color="white" />
-            </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <Feather
+              name="chevron-right"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10 }}
+            />
           </View>
         </View>
       </View>
@@ -212,7 +216,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
-    marginBottom: 20,
+    marginBottom: 30,
     color: "#1A6A45",
   },
   lightGreenContainer: {
@@ -225,47 +229,53 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   photo: {
-    width: 200,
-    height: 220,
+    width: 180,
+    height: 200,
     resizeMode: "cover",
     borderRadius: 8,
   },
   dateText: {
     marginTop: 5,
-    color: "#1A6A45",
+    color: "#1F8505",
     fontSize: 16,
     fontFamily: "GT-Eesti-Display-Bold-Trial",
   },
   scrollView: {
-    marginHorizontal: 5,
     marginBottom: 10,
   },
   suggestionContainer: {
+    flex: 1,
     marginBottom: 15,
     alignItems: "center",
+    marginLeft: 30,
+  },
+  searchAgainText: {
+    color: "#1A6A45",
+    marginTop: 30,
+    fontSize: 22,
+    marginBottom: 20,
+    fontFamily: "GT-Eesti-Display-Bold-Trial",
   },
   suggestionImage: {
-    width: width / 2.5,
-    height: (height / 5) * 1,
+    height: 145,
+    width: 140,
     borderRadius: 8,
     marginBottom: 5,
   },
-  addText: {
-    color: "#1A6A45",
-    textDecorationLine: "underline",
-  },
-  buttonContainer: {
-    marginTop: 20,
-  },
-  button: {
+  addButton: {
     backgroundColor: "#1A6A45",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 25,
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
   },
-  buttonText: {
-    color: "#FFFFFF",
+  addButtonText: {
+    color: "#fff",
     fontSize: 16,
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
+    fontWeight: "bold",
   },
 });
+
+export default IdentifiedScreen;
