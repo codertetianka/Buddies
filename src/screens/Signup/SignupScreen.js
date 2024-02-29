@@ -64,7 +64,7 @@ export const SignupScreen = () => {
               Sign Up to{" "}
               <Text
                 style={{
-                  color: "#3bb162",
+                  color: "#1f8505",
                   fontFamily: "GT-Eesti-Display-Medium-Trial",
                 }}
               >

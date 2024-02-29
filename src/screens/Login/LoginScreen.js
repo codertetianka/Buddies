@@ -32,11 +32,12 @@ export const LoginScreen = () => {
   const handleLogin = async () => {
     const q = query(collection(db, "users"), where("username", "==", username));
     try {
+      setIsLoggingIn(true);
       const snapshot = await getDocs(q);
+
       snapshot.forEach((doc) => {
         const userdata = doc.data();
         if (userdata.username) {
-          setIsLoggingIn(true);
           setLoggedInUser(userdata);
         }
       });
@@ -44,6 +45,8 @@ export const LoginScreen = () => {
     } catch (err) {
       console.log(err);
     }
+
+    setIsLoggingIn(false);
   };
 
   const handleSignup = () => {
@@ -69,7 +72,7 @@ export const LoginScreen = () => {
           >
             <Text style={styles.buddiesText}>
               Welcome back to your{" "}
-              <Text style={{ color: "hsla(140, 37%, 52%, 1)" }}>Buddies!</Text>
+              <Text style={{ color: "#1f8505" }}>Buddies!</Text>
             </Text>
 
             <View style={styles.inputContainer}>

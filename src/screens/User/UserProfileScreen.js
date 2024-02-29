@@ -367,7 +367,12 @@ export const UserProfileScreen = () => {
       item.common_name.charAt(0).toUpperCase() + item.common_name.slice(1);
 
     return (
-      <View style={[styles.plantContainer, { width: width - 35 }]}>
+      <View
+        style={[
+          styles.plantContainer,
+          { width: width - 35, position: "relative" },
+        ]}
+      >
         <View style={styles.imageContainer}>
           {item.original_url ? (
             <Image
@@ -382,26 +387,78 @@ export const UserProfileScreen = () => {
           )}
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.plantName}>{capitalizedPlantName}</Text>
-          <Text>☀️Prefers {item.sunlight[0]}</Text>
-          <Text>💧Water every {handleWateringLabel(item.watering)} days</Text>
-          <TouchableOpacity onPress={() => handlePressNotification(item)}>
-            {item.hasNotification ? (
-              <Text>cancel notification</Text>
-            ) : (
-              <Text>create notification</Text>
-            )}
-          </TouchableOpacity>
-          <View style={styles.daysIconContainer}>
-            <Text style={styles.daysText}>
-              {handleStreakCounter(item.date_added, todaysDate)} days
+          <View
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.plantName}> {capitalizedPlantName}</Text>
+            <TouchableOpacity onPress={() => handlePressNotification(item)}>
+              {item.hasNotification ? (
+                <Feather name="bell-off" size={24} color="#e27e18" />
+              ) : (
+                <Feather name="bell" size={24} color="#e27e18" />
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.textPreferences}>
+            <Text style={styles.preferenceText}>
+              <Feather
+                name="sun"
+                size={20}
+                color="#e27e18"
+                style={styles.iconStyle}
+              />{" "}
+              Prefers {item.sunlight[0]}
+            </Text>
+            <Text style={styles.preferenceText}>
+              <Feather
+                name="droplet"
+                size={20}
+                color="#56B1FA"
+                style={styles.iconStyle}
+              />{" "}
+              Every {handleWateringLabel(item.watering)} days
             </Text>
           </View>
-        </View>
-        <View style={styles.trashIconContainer}>
-          <TouchableOpacity onPress={() => handleDelete(item)}>
-            <Feather name="trash-2" size={24} color="#1a6a45" />
-          </TouchableOpacity>
+
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingRight: 0.5,
+              paddingBottom: 8,
+            }}
+          >
+            <View style={styles.daysIconContainer}>
+              <Text
+                style={[
+                  styles.daysText,
+                  { alignItems: "center", flexDirection: "row" },
+                ]}
+              >
+                <Feather
+                  name="calendar"
+                  size={20}
+                  color="#1f8505"
+                  style={{ marginRight: 5 }}
+                />{" "}
+                {handleStreakCounter(item.date_added, todaysDate)} days
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => handleDelete(item)}>
+              <Feather name="trash-2" size={24} color="#1a6a45" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -448,8 +505,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingHorizontal: 20, // Added paddingHorizontal for better spacing
+    paddingHorizontal: 18,
   },
+
+  textPreferences: {
+    marginTop: 1,
+  },
+  preferenceText: {
+    flexDirection: "row",
+    alignItems: "center",
+    fontFamily: "GT-Eesti-Display-Light-Trial",
+    color: "#1a6a45",
+    lineHeight: 25,
+    marginBottom: 9,
+  },
+
   plantsContainer: {
     flex: 1,
     width: "100%",
@@ -462,8 +532,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   imageContainer: {
-    width: width / 2.7,
-    height: (height / 6) * 1,
+    height: 145,
+    width: 140,
   },
   plantImage: {
     flex: 1,
@@ -471,29 +541,26 @@ const styles = StyleSheet.create({
     height: null,
     resizeMode: "cover",
     borderRadius: 8,
-    marginBottom: 5,
   },
   textContainer: {
     flex: 1,
-    marginLeft: 13,
-    justifyContent: "center",
+    marginLeft: 16,
+    marginRight: 16,
+    height: "90%",
   },
   plantName: {
-    fontSize: 17,
+    fontSize: 20,
     fontFamily: "GT-Eesti-Display-Medium-Trial",
     color: "black",
+    lineHeight: 30,
   },
-  trashIconContainer: {
-    marginTop: 80,
-    padding: 17,
-  },
-  daysIconContainer: {
-    marginBottom: 65,
-    marginTop: 15,
-  },
+
   daysText: {
-    color: "#3bb162",
-    fontFamily: "GT-Eesti-Display-Bold-Trial",
-    fontSize: 14,
+    color: "#1a6a45",
+    fontFamily: "GT-Eesti-Display-Light-Trial",
+    marginLeft: 1,
+  },
+  iconStyle: {
+    marginRight: 5,
   },
 });

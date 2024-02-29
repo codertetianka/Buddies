@@ -22,13 +22,17 @@ import UserContext from "./context/UserContext";
 import NoteIdentContext from "./context/NoteIdentContext";
 import "react-native-gesture-handler";
 import { CameraComponent } from "./src/screens/Components/CameraComponent";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+  SafeAreaProvider,
+} from "react-native-safe-area-context";
 import { StackScreens } from "./App.screens";
 import { fonts } from "./fonts";
 import { db } from "./firebaseConfig";
 import { query, where, getDocs, collection } from "firebase/firestore";
 import SearchResultsPage from "./src/screens/Plants/SearchResultsPage";
-import LogoImage from "./images/logo3.png";
+import LogoImage from "./images/2.png";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -74,12 +78,7 @@ function CustomDrawerContent({ loggedInUser, setLoggedInUser, ...props }) {
           navigate(StackScreens.HomeScreen);
         }}
       />
-      <DrawerItem
-        label="Change Profile"
-        onPress={() => {
-          navigate(StackScreens.Login);
-        }}
-      />
+
       <DrawerItem
         label="Log out"
         onPress={() => {
@@ -101,7 +100,7 @@ const AppStack = () => (
           <View style={{ backgroundColor: "white" }}>
             <Image
               source={LogoImage}
-              style={{ width: 180, height: 60 }}
+              style={{ width: 200, height: 60 }}
               resizeMode="cover"
               border="none"
             />
@@ -115,7 +114,7 @@ const AppStack = () => (
       component={LoginScreen}
       options={{
         header: () => (
-          <View style={{ backgroundColor: "white" }}>
+          <View style={{ backgroundColor: "white", height: 60 }}>
             <Image
               source={LogoImage}
               style={{ width: 180, height: 60 }}
@@ -124,13 +123,25 @@ const AppStack = () => (
             />
           </View>
         ),
-        headerShown: false,
+        headerShown: true,
       }}
     />
     <Stack.Screen
       name={StackScreens.SignupScreen}
       component={SignupScreen}
-      options={{ title: "Sign Up", headerShown: false }}
+      options={{
+        header: () => (
+          <View style={{ backgroundColor: "white", height: 60 }}>
+            <Image
+              source={LogoImage}
+              style={{ width: 180, height: 60 }}
+              resizeMode="cover"
+              border="none"
+            />
+          </View>
+        ),
+        headerShown: true,
+      }}
     />
     <Stack.Screen
       name={StackScreens.UserProfileScreen}
@@ -214,6 +225,33 @@ const AppStack = () => (
   </Stack.Navigator>
 );
 
+const DrawerStack = ({ loggedInUser, setLoggedInUser }) => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={{ flex: 1, paddingTop: loggedInUser ? 0 : insets?.top }}>
+      <Drawer.Navigator
+        initialRouteName={DrawerScreens.AppStack}
+        drawerContent={(props) =>
+          loggedInUser ? (
+            <CustomDrawerContent
+              loggedInUser={loggedInUser}
+              setLoggedInUser={setLoggedInUser}
+              {...props}
+            />
+          ) : null
+        }
+      >
+        <Drawer.Screen
+          name=" "
+          options={{ headerShown: !!loggedInUser }}
+          component={AppStack}
+        ></Drawer.Screen>
+      </Drawer.Navigator>
+    </View>
+  );
+};
+
 export default function App() {
   const [fontsLoaded, fontError] = useFonts(fonts);
 
@@ -271,45 +309,22 @@ export default function App() {
   }
 
   return (
-    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
-      <NoteIdentContext.Provider
-        value={{ notificationIdentifier, setNotificationIdentifier }}
-      >
-        <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
-          <NavigationContainer>
-            {loggedInUser ? (
-              <Drawer.Navigator
-                initialRouteName={DrawerScreens.AppStack}
-                drawerContent={(props) => (
-                  <CustomDrawerContent
-                    loggedInUser={loggedInUser}
-                    setLoggedInUser={setLoggedInUser}
-                    {...props}
-                  />
-                )}
-              >
-                <Drawer.Screen name=" " component={AppStack}></Drawer.Screen>
-              </Drawer.Navigator>
-            ) : (
-              <Stack.Navigator initialRouteName={StackScreens.Login}>
-                <Stack.Screen
-                  name={StackScreens.Login}
-                  component={LoginScreen}
-                />
-                <Stack.Screen
-                  name={StackScreens.SignupScreen}
-                  component={SignupScreen}
-                />
-                <Stack.Screen
-                  name={StackScreens.UserProfileScreen}
-                  component={UserProfileScreen}
-                />
-              </Stack.Navigator>
-            )}
-          </NavigationContainer>
-        </SafeAreaView>
-      </NoteIdentContext.Provider>
-    </UserContext.Provider>
+    <SafeAreaView onLayout={onLayoutRootView} style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+          <NoteIdentContext.Provider
+            value={{ notificationIdentifier, setNotificationIdentifier }}
+          >
+            <NavigationContainer>
+              <DrawerStack
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+              />
+            </NavigationContainer>
+          </NoteIdentContext.Provider>
+        </UserContext.Provider>
+      </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
 
