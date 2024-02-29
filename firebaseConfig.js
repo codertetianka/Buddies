@@ -11,12 +11,12 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC5DI_bgGV75V8PCA1nB7D7aQ4u72DieoA",
-  authDomain: "buddies-82f2e.firebaseapp.com",
-  projectId: "buddies-82f2e",
-  storageBucket: "buddies-82f2e.appspot.com",
-  messagingSenderId: "180350395573",
-  appId: "1:180350395573:web:dbeeeab601d113fb1acafc",
+  apiKey: "[YOUR-API-KEY]",
+  authDomain: "[YOUR-AUTH-DOMAIN]",
+  projectId: "[YOUR-PROJECT-ID]",
+  storageBucket: "[YOUR-STORAGE-BUCKET]",
+  messagingSenderId: "[YOUR-MESSAGING-SENDER-ID]",
+  appId: "[YOUR-APP-ID]",
 };
 
 // Initialize Firebase

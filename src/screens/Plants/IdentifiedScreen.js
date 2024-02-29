@@ -26,7 +26,7 @@ import UserContext from "../../../context/UserContext";
 import { StackScreens } from "../../../App.screens";
 import { Feather } from "@expo/vector-icons";
 import { plantListExample } from "../../../Test Data/plant_id_output"; // hard coded test data to limit api calls
-import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
+import { PlantListApi } from "../API/PlantListApi"; // Perenuals api call
 
 const { width, height } = Dimensions.get("window");
 
@@ -42,10 +42,10 @@ export const IdentifiedScreen = ({ route }) => {
     const fetchPlantData = async () => {
       try {
         // Correct method for fetching data from api - comment out so don't use too many api calls
-        // const plantData = await PlantListApi();
-        // setPlantList(plantData);
-        // for testing purposes, comment out when changing to using API call
-        setPlantList(plantListExample);
+        const plantData = await PlantListApi();
+        setPlantList(plantData);
+        // Below for testing purposes, comment out when changing to using API call
+        // setPlantList(plantListExample);
       } catch (err) {
         console.log(err);
       }
