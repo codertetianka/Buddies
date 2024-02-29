@@ -33,6 +33,7 @@ export const IdentifiedScreen = ({ route }) => {
   const { navigate } = useNavigation();
   const { savedImageUrl, suggestions, dateTaken } = route.params;
   const [plantList, setPlantList] = useState([]);
+  const [foundPlant, setFoundPlant] = useState(null);
   const [scientificName, setScientificName] = useState(null);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
@@ -54,18 +55,15 @@ export const IdentifiedScreen = ({ route }) => {
           .toLowerCase()
           .includes(scientificName.toLowerCase())
       ) {
-        return plantList[i];
+        setFoundPlant(plantList[i]);
+        break;
       }
     }
-    return null;
   };
 
   useEffect(() => {
     if (scientificName) {
-      const foundPlant = findMatchingPlant(scientificName);
-      if (foundPlant) {
-        handleAddPlant(foundPlant, dateTaken, savedImageUrl);
-      }
+      findMatchingPlant(scientificName);
     }
   }, [scientificName]);
 
@@ -116,6 +114,13 @@ export const IdentifiedScreen = ({ route }) => {
     }
   };
 
+  useEffect(() => {
+    if (foundPlant) {
+      handleAddPlant(foundPlant, dateTaken, savedImageUrl);
+      navigate(StackScreens.UserProfileScreen);
+    }
+  }, [foundPlant, navigate]);
+
   return (
     <ImageBackground
       resizeMode="cover"
@@ -163,7 +168,10 @@ export const IdentifiedScreen = ({ route }) => {
                         ? suggestion.plant_details.common_names[0]
                         : suggestion.plant_details.scientific_name}
                     </Text>
-                    <Text>Probability: {suggestion.probability}</Text>
+                    <Text>
+                      Probability:{" "}
+                      {`${Math.floor(suggestion.probability * 100)}%`}
+                    </Text>
                     <TouchableOpacity
                       onPress={() =>
                         handleMatchingPlant(
