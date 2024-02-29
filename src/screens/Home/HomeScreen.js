@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
 import SearchCameraBar from "../Components/SearchCameraBar";
 import { db, storage } from "../../../firebaseConfig";
 import {
@@ -24,15 +23,15 @@ import {
   getDocs,
   arrayUnion,
 } from "firebase/firestore";
-// import { StackScreens } from "../../../App.screens";
-import { data } from "./../../../data";
 import UserContext from "../../../context/UserContext";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { data } from "../../../Test Data/data"; // hard coded test data to limit api calls
+import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
 
 export const HomeScreen = () => {
-  // const { navigate } = useNavigation();
   const [pageNumber, setPageNumber] = useState(1);
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const [plantList, setPlantList] = useState([]);
 
   useEffect(() => {
     loadPlantData();
@@ -43,6 +42,21 @@ export const HomeScreen = () => {
       setPageNumber(pageNumber + 1);
     }, 1000);
   };
+
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      try {
+        // Correct method for fetching data from api - comment out so don't use too many api calls
+        const plantData = await PlantListApi();
+        setPlantList(plantData);
+        // for testing purposes, comment out when changing to using API call
+        // setPlantList(plantListExample);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPlantData();
+  }, []);
 
   const handlePress = async (item) => {
     try {
@@ -80,7 +94,6 @@ export const HomeScreen = () => {
               .toISOString()
               .toString()
               .slice(0, 10);
-
 
             const plantRef = doc(db, "users", user.id);
             updateDoc(plantRef, {
@@ -202,7 +215,7 @@ export const HomeScreen = () => {
           }}
         >
           <FlatList
-            data={data}
+            data={plantList}
             renderItem={(props) =>
               renderRowItem({
                 ...props,

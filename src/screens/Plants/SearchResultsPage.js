@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -22,13 +22,30 @@ import { db, storage } from "../../../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import UserContext from "../../../context/UserContext";
 import SearchCameraBar from "../Components/SearchCameraBar";
-import { data } from "../../../data";
+import { data } from "../../../Test Data/data"; // hard coded test data to limit api calls
+import { PlantListApi } from "../API/PlantListApi"; // Perenials api call
 
 const SearchResultsPage = ({ route }) => {
   const { searchPhrase } = route.params;
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const [plantList, setPlantList] = useState([]);
 
-  const filteredData = data.filter((plant) =>
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      try {
+        // Correct method for fetching data from api - comment out so don't use too many api calls
+        const plantData = await PlantListApi();
+        setPlantList(plantData);
+        // for testing purposes, comment out when changing to using API call
+        // setPlantList(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPlantData();
+  }, []);
+
+  const filteredData = plantList.filter((plant) =>
     plant.common_name.toLowerCase().includes(searchPhrase.toLowerCase())
   );
 
