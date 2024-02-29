@@ -209,7 +209,7 @@ const AppStack = () => (
       component={SearchResultsPage}
       options={{
         headerTitle: () => (
-          <View style={{ marginBottom: 120 }}>
+          <View style={{ marginBottom: 0 }}>
             <Image
               source={LogoImage}
               style={{ width: 180, height: 180 }}
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
