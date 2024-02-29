@@ -472,7 +472,7 @@ export const UserProfileScreen = () => {
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
-          {loggedInUser.plants ? (
+          {loggedInUser ? (
             <SafeAreaView style={styles.plantsContainer}>
               <FlatList
                 data={loggedInUser.plants}
@@ -480,9 +480,7 @@ export const UserProfileScreen = () => {
                 keyExtractor={(item, index) => item.id + index}
               />
             </SafeAreaView>
-          ) : (
-            <Text>No plants added yet</Text>
-          )}
+          ) : null}
         </View>
       </View>
     </ImageBackground>

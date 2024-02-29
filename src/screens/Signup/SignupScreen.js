@@ -33,9 +33,6 @@ export const SignupScreen = () => {
       const trimmedName = name.trim();
       const trimmedUsername = username.trim();
 
-      console.log(trimmedName);
-      console.log(trimmedUsername);
-
       const q = query(
         collection(db, "users"),
         where("username", "==", trimmedUsername)
@@ -50,11 +47,13 @@ export const SignupScreen = () => {
       const docRef = await addDoc(collection(db, "users"), {
         name: trimmedName,
         username: trimmedUsername,
+        plants: [],
       });
       setLoggedInUser({
         id: docRef.id,
         name: trimmedName,
         username: trimmedUsername,
+        plants: [],
       });
     } catch (err) {
       console.log(err);
